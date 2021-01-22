@@ -1,9 +1,37 @@
-<div class="container">
-    <div class="row">
+<div class="container" style="min-width: 1800px;">
+    <div class="row"> 
         {{#each items}}
             <div class="statisBox">
-                <div class="category">{{this.title}}</div>
-                <ul>
+                <div class="category">
+                    {{#ifCond this.title "Points"}}
+                        自幹前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Rebounds"}}
+                        籃板前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Assists"}}
+                        最無私前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Blocks"}}
+                        火鍋前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Steals"}}
+                        抄截前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Turnovers"}}
+                        失誤前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Three Pointers Made"}}
+                        三分命中前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Free Throws Made"}}
+                        買飯前五
+                    {{/ifCond}}
+                    {{#ifCond this.title "Fantasy Points"}}
+                        范特西前五
+                    {{/ifCond}}
+                </div>
+                <ol>
                     {{#each playerstats}}
                         <li>
                             {{this.PLAYER_NAME}}
@@ -37,7 +65,7 @@
                             {{/ifCond}}
                         </li>
                     {{/each}}
-                </ul>
+                </ol>
             </div>
         {{/each}}
     </div>

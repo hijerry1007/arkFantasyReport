@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.statisBox {
+    display: flex; 
+    flex-flow: column;
+    width: 475px;
+    max-width: 475px;
+    margin: 3rem auto 0;
+}
+
+.category {
+    font-size: 24px;
+    font-weight: 600;
+    color: rgb(28, 28, 145);
+    border-bottom: 1px solid rgb(155, 155, 155);
+}
+
+.statisBox ol{
+    margin-left: 1.25rem;
+}
+
+.statisBox ol li{
+    margin: 0.5rem 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
