@@ -163,53 +163,62 @@ async function handleBigData(bigData) {
     const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
     const title = JSON.parse(table.title);
     const tableLength = title.length;
+    const data = {};
     for (let i = 0; i < bigData.length; i++) {
         let gameStatis = bigData[i];
         while(gameStatis.length > 0 ){
-            let playerStatis = gameStatis.slice(0, tableLength);
+            let statis = gameStatis.splice(0, tableLength);
+            let playerStatis = await checkDouble(title, statis);
+            if(data[playerStatis.performance] === undefined){
+                data[playerStatis.performance] = [];
+            }
+            data[playerStatis.performance].push(playerStatis);
         }
     }
+    return data;
 }
 
 function checkDouble (title, statis){
-    const playerStatis = {}
-    let count = 0;
-    for (let i = 0 ; i < title.length ; i++){
-        const title = title[i];
-        const statis = statis[i];
-        switch(title){
-            case "PTS":
-                if(statis > 9) count++;
-                break;
-            case "REB":
-                if(statis > 9) count++;
-                break;
-            case "AST":
-                if(statis > 9) count++;
-                break;
-            case "STL":
-                if(statis > 9) count++;
-                break;
-            case "BLK":
-                if(statis > 9) count++;
-                break;
-            default:
-                break;
+    return new Promise((resolve, reject) => {
+        const playerStatis = {}
+        let count = 0;
+        for (let i = 0 ; i < title.length ; i++){
+            let title = title[i];
+            let _statis = statis[i];
+            switch(title){
+                case "PTS":
+                    if(_statis > 9) count++;
+                    break;
+                case "REB":
+                    if(_statis > 9) count++;
+                    break;
+                case "AST":
+                    if(_statis > 9) count++;
+                    break;
+                case "STL":
+                    if(_statis > 9) count++;
+                    break;
+                case "BLK":
+                    if(_statis > 9) count++;
+                    break;
+                default:
+                    break;
+            }
+            playerStatis[title] = _statis;
         }
-        playerStatis[title] = statis;
-    }
+        
+        if(count === 0 || count === 1){
+            playerStatis.performance = "single";
+        }else if (count === 2){
+            playerStatis.performance = "doubleDouble";
+        }else if (count === 3){
+            playerStatis.performance = "tripleDouble";
+        }else if (count === 4){
+            playerStatis.performance = "quadrupleDouble";
+        }else if (count === 5){
+            playerStatis.performance = "fiveDouble";
+        }
     
-    if(count === 0 || count === 1){
-        playerStatis.performance = "single";
-    }else if (count === 2){
-        playerStatis.performance = "doubleDouble";
-    }else if (count === 3){
-        playerStatis.performance = "tripleDouble";
-    }else if (count === 4){
-        playerStatis.performance = "quadrupleDouble";
-    }else if (count === 5){
-        playerStatis.performance = "fiveDouble";
-    }
-
-    return playerStatis;
+        resolve(playerStatis)
+    })
 }
