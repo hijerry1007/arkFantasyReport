@@ -159,14 +159,57 @@ function fetchBoxURL(baseURL) {
 }
 
 
-async function parseBigData(bigData) {
+async function handleBigData(bigData) {
     const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
     const title = JSON.parse(table.title);
     const tableLength = title.length;
     for (let i = 0; i < bigData.length; i++) {
-        for (let j = 0; j < bigData[i].length; j++) {
-
+        let gameStatis = bigData[i];
+        while(gameStatis.length > 0 ){
+            let playerStatis = gameStatis.slice(0, tableLength);
         }
     }
 }
 
+function checkDouble (title, statis){
+    const playerStatis = {}
+    let count = 0;
+    for (let i = 0 ; i < title.length ; i++){
+        const title = title[i];
+        const statis = statis[i];
+        switch(title){
+            case "PTS":
+                if(statis > 9) count++;
+                break;
+            case "REB":
+                if(statis > 9) count++;
+                break;
+            case "AST":
+                if(statis > 9) count++;
+                break;
+            case "STL":
+                if(statis > 9) count++;
+                break;
+            case "BLK":
+                if(statis > 9) count++;
+                break;
+            default:
+                break;
+        }
+        playerStatis[title] = statis;
+    }
+    
+    if(count === 0 || count === 1){
+        playerStatis.performance = "single";
+    }else if (count === 2){
+        playerStatis.performance = "doubleDouble";
+    }else if (count === 3){
+        playerStatis.performance = "tripleDouble";
+    }else if (count === 4){
+        playerStatis.performance = "quadrupleDouble";
+    }else if (count === 5){
+        playerStatis.performance = "fiveDouble";
+    }
+
+    return playerStatis;
+}
