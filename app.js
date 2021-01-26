@@ -24,7 +24,7 @@ app.use(express.static('public'));
 
 app.get("/fetchData", async (req, res) => {
     try {
-        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" });
+        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
         const page = await browser.newPage();
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
@@ -84,7 +84,7 @@ app.get("/fetchData", async (req, res) => {
 
 app.get("/fetchTableHead", async (req, res) => {
     try {
-        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" });
+        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
         const page = await browser.newPage();
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
@@ -129,19 +129,38 @@ app.get("/hot", (req, res) => {
     });
 });
 
-app.get("/dailyReport", (req, res) => {
+app.get("/dailyReport", async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
+
     gameRecord.findOne({ where: { gameDate: today } })
         .then((result) => {
             if (!result){
                 console.log("error, no data");
             }
-            let bigData = result.bigData;
-            let data = handleBigData(bigData);
-
-            res.render("dailyReport", { data: data });
-
-
+            let bigData = JSON.parse(result.bigData);
+            let double = [];
+            let triple = [];
+            let quadra = []
+            let five = []
+            for ( let i = 0 ; i < bigData.length; i++){
+                switch(bigData[i].performance){
+                    case "doubleDouble":
+                        double.push(bigData[i]);
+                        break;
+                    case "tripleDouble":
+                        triple.push(bigData[i]);
+                        break;
+                    case "quadrupleDouble":
+                        quadra.push(bigData[i]);
+                        break;
+                    case "fiveDouble":
+                        five.push(bigData[i]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            res.render("dailyReport", { double, triple, quadra, five });
         })
 })
 
