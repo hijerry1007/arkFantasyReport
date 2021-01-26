@@ -13,13 +13,13 @@ const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
 
 
-let fetchHead = cron.schedule('0 6 * * *', () =>  {
+let fetchHead = cron.schedule('0 6 * * *', () => {
     fetchTableHead();
-}, {timezone: 'Asia/Shanghai'})
+}, { timezone: 'Asia/Shanghai' })
 
-let fetchBoxData = cron.schedule('*/5 7-15 * * *', () =>  {
+let fetchBoxData = cron.schedule('*/5 7-15 * * *', () => {
     fetchData();
-}, {timezone: 'Asia/Shanghai'})
+}, { timezone: 'Asia/Shanghai' })
 fetchHead.start();
 fetchBoxData.start();
 
@@ -37,25 +37,25 @@ app.get("/dailyReport", async (req, res) => {
 
     gameRecord.findOne({ where: { gameDate: today } })
         .then((result) => {
-            if (!result){
+            if (!result) {
                 console.log("error, no data");
             }
             let bigData = JSON.parse(result.bigData);
-            let PTS = bigData.sort((a,b) => b.PTS-a.PTS).slice(0,5);
-            let REB = bigData.sort((a,b) => b.REB-a.REB).slice(0,5);
-            let AST = bigData.sort((a,b) => b.AST-a.AST).slice(0,5);
-            let STL = bigData.sort((a,b) => b.STL-a.STL).slice(0,5);
-            let BLK = bigData.sort((a,b) => b.BLK-a.BLK).slice(0,5);
-            let THREE = bigData.sort((a,b) => b['3PM'] -a['3PM']).slice(0,5);
-            let TO = bigData.sort((a,b) => b.TO-a.TO).slice(0,5);
-            let FT = bigData.sort((a,b) => b.FTA-a.FTA).slice(0,5);
-            let FGA = bigData.sort((a,b) => b.FGA-a.FGA).slice(0,5);
+            let PTS = bigData.sort((a, b) => b.PTS - a.PTS).slice(0, 5);
+            let REB = bigData.sort((a, b) => b.REB - a.REB).slice(0, 5);
+            let AST = bigData.sort((a, b) => b.AST - a.AST).slice(0, 5);
+            let STL = bigData.sort((a, b) => b.STL - a.STL).slice(0, 5);
+            let BLK = bigData.sort((a, b) => b.BLK - a.BLK).slice(0, 5);
+            let THREE = bigData.sort((a, b) => b['3PM'] - a['3PM']).slice(0, 5);
+            let TO = bigData.sort((a, b) => b.TO - a.TO).slice(0, 5);
+            let FT = bigData.sort((a, b) => b.FTA - a.FTA).slice(0, 5);
+            let FGA = bigData.sort((a, b) => b.FGA - a.FGA).slice(0, 5);
             let double = [];
             let triple = [];
             let quadra = []
             let five = []
-            for ( let i = 0 ; i < bigData.length; i++){
-                switch(bigData[i].performance){
+            for (let i = 0; i < bigData.length; i++) {
+                switch (bigData[i].performance) {
                     case "doubleDouble":
                         double.push(bigData[i]);
                         break;
@@ -72,10 +72,10 @@ app.get("/dailyReport", async (req, res) => {
                         break;
                 }
             }
-            double.sort((a,b) => b.PTS-a.PTS);
-            triple.sort((a,b) => b.PTS-a.PTS);
-            quadra.sort((a,b) => b.PTS-a.PTS)
-            five.sort((a,b) => b.PTS-a.PTS)
+            double.sort((a, b) => b.PTS - a.PTS);
+            triple.sort((a, b) => b.PTS - a.PTS);
+            quadra.sort((a, b) => b.PTS - a.PTS)
+            five.sort((a, b) => b.PTS - a.PTS)
             res.render("dailyReport", { PTS, REB, AST, STL, BLK, THREE, TO, FGA, FT, double, triple, quadra, five });
         })
 })
@@ -84,7 +84,7 @@ app.get("/dailyReport", async (req, res) => {
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`));
 
 
-async function fetchTableHead () {
+async function fetchTableHead() {
     try {
         const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
@@ -157,7 +157,7 @@ async function fetchData() {
         }
         await browser.close();
         let data = await handleBigData(bigData, title);
-        data  = JSON.stringify(data);
+        data = JSON.stringify(data);
         gameRecord.findOne({ where: { gameDate: today } })
             .then(record => {
                 if (!record) {
@@ -208,7 +208,7 @@ function handleBigData(bigData, title) {
         const data = [];
         for (let i = 0; i < bigData.length; i++) {
             let gameStatis = bigData[i];
-            while(gameStatis.length > 0 ){
+            while (gameStatis.length > 0) {
                 let statis = gameStatis.splice(0, tableLength);
                 let playerStatis = await getPlayerData(title, statis);
                 data.push(playerStatis);
@@ -218,47 +218,47 @@ function handleBigData(bigData, title) {
     })
 }
 
-function getPlayerData (title, statis){
+function getPlayerData(title, statis) {
     return new Promise((resolve, reject) => {
         const playerStatis = {}
         let count = 0;
-        for (let i = 0 ; i < title.length ; i++){
+        for (let i = 0; i < title.length; i++) {
             let _title = title[i];
             let _statis = statis[i];
-            switch(_title){
+            switch (_title) {
                 case "PTS":
-                    if(_statis > 9) count++;
+                    if (_statis > 9) count++;
                     break;
                 case "REB":
-                    if(_statis > 9) count++;
+                    if (_statis > 9) count++;
                     break;
                 case "AST":
-                    if(_statis > 9) count++;
+                    if (_statis > 9) count++;
                     break;
                 case "STL":
-                    if(_statis > 9) count++;
+                    if (_statis > 9) count++;
                     break;
                 case "BLK":
-                    if(_statis > 9) count++;
+                    if (_statis > 9) count++;
                     break;
                 default:
                     break;
             }
             playerStatis[_title] = _statis;
         }
-        
-        if(count === 0 || count === 1){
+
+        if (count === 0 || count === 1) {
             playerStatis.performance = "single";
-        }else if (count === 2){
+        } else if (count === 2) {
             playerStatis.performance = "doubleDouble";
-        }else if (count === 3){
+        } else if (count === 3) {
             playerStatis.performance = "tripleDouble";
-        }else if (count === 4){
+        } else if (count === 4) {
             playerStatis.performance = "quadrupleDouble";
-        }else if (count === 5){
+        } else if (count === 5) {
             playerStatis.performance = "fiveDouble";
         }
-    
+
         resolve(playerStatis)
     })
 }
