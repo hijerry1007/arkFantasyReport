@@ -40,6 +40,7 @@ app.get("/fetch", (req, res) => {
     fetchData();
 })
 
+
 app.get("/dailyReport", async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
 
