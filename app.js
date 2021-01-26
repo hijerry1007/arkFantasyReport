@@ -9,7 +9,6 @@ const cheerio = require("cheerio");
 const moment = require('moment');
 const puppeteer = require('puppeteer');
 const db = require('./models');
-const { all } = require('sequelize/types/lib/operators');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
 
@@ -30,8 +29,7 @@ app.get("/fetchData", async (req, res) => {
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
         const today = moment().format('YYYY-MM-DD');
-        let bigData = {};
-        let rows = [];
+        const bigData = [];
         const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
         const title = JSON.parse(table.title);
         const thLength = title.length;
@@ -60,20 +58,20 @@ app.get("/fetchData", async (req, res) => {
                 }
                 return _rows;
             }, thLength);
-            rows.push(tds);
+            bigData.push(tds);
         }
         await browser.close();
-        bigData.data = rows;
-        bigData = JSON.stringify(bigData);
+        let data = await handleBigData(bigData, title);
+        data  = JSON.stringify(data);
         gameRecord.findOne({ where: { gameDate: today } })
             .then(record => {
                 if (!record) {
                     gameRecord.create({
                         gameDate: today,
-                        bigData: bigData,
+                        bigData: data,
                     }).then(record => record);
                 } else {
-                    record.bigData = bigData;
+                    record.bigData = data;
                     return record.save();
                 }
 
@@ -176,20 +174,20 @@ function fetchBoxURL(baseURL) {
 }
 
 
-async function handleBigData(bigData) {
-    const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
-    const title = JSON.parse(table.title);
-    const tableLength = title.length;
-    const data = [];
-    for (let i = 0; i < bigData.length; i++) {
-        let gameStatis = bigData[i];
-        while(gameStatis.length > 0 ){
-            let statis = gameStatis.splice(0, tableLength);
-            let playerStatis = await getPlayerData(title, statis);
-            data.push(playerStatis);
+function handleBigData(bigData, title) {
+    return new Promise(async (resolve, reject) => {
+        const tableLength = title.length;
+        const data = [];
+        for (let i = 0; i < bigData.length; i++) {
+            let gameStatis = bigData[i];
+            while(gameStatis.length > 0 ){
+                let statis = gameStatis.splice(0, tableLength);
+                let playerStatis = await getPlayerData(title, statis);
+                data.push(playerStatis);
+            }
         }
-    }
-    return data;
+        resolve(data);
+    })
 }
 
 function getPlayerData (title, statis){
