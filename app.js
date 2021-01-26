@@ -18,7 +18,7 @@ let fetchHead = cron.schedule('0 6 * * *', () =>  {
     fetchTableHead();
 }, {timezone: 'Asia/Shanghai'})
 
-let fetchBoxData = cron.schedule('*/5 7-14 * * *', () =>  {
+let fetchBoxData = cron.schedule('* * * * *', () =>  {
     fetchData();
 }, {timezone: 'Asia/Shanghai'})
 fetchHead.start();
@@ -101,7 +101,7 @@ app.listen(process.env.PORT || port, () => console.log(`Example app listening on
 
 async function fetchTableHead () {
     try {
-        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
@@ -134,7 +134,7 @@ async function fetchTableHead () {
 
 async function fetchData() {
     try {
-        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
