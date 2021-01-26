@@ -13,15 +13,15 @@ const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
 
 
-let fetchHead = cron.schedule('0 6 * * *', () => {
-    fetchTableHead();
-}, { timezone: 'Asia/Shanghai' })
+// let fetchHead = cron.schedule('0 6 * * *', () => {
+//     fetchTableHead();
+// }, { timezone: 'Asia/Shanghai' })
 
-let fetchBoxData = cron.schedule('*/5 7-15 * * *', () => {
-    fetchData();
-}, { timezone: 'Asia/Shanghai' })
-fetchHead.start();
-fetchBoxData.start();
+// let fetchBoxData = cron.schedule('*/5 7-15 * * *', () => {
+//     fetchData();
+// }, { timezone: 'Asia/Shanghai' })
+// fetchHead.start();
+// fetchBoxData.start();
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -31,6 +31,14 @@ app.engine('handlebars', handlebars({
 }));
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
+
+app.get("/", (req, res) => {
+    fetchTableHead();
+})
+
+app.get("/fetch", (req, res) => {
+    fetchData();
+})
 
 app.get("/dailyReport", async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
