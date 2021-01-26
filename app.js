@@ -8,9 +8,21 @@ const request = require("request");
 const cheerio = require("cheerio");
 const moment = require('moment');
 const puppeteer = require('puppeteer');
+const cron = require("node-cron");
 const db = require('./models');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
+
+
+let fetchHead = cron.schedule('0 6 * * *', () =>  {
+    fetchTableHead();
+}, {timezone: 'Asia/Shanghai'})
+
+let fetchBoxData = cron.schedule('*/5 7-14 * * *', () =>  {
+    fetchData();
+}, {timezone: 'Asia/Shanghai'})
+fetchHead.start();
+fetchBoxData.start();
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -20,100 +32,6 @@ app.engine('handlebars', handlebars({
 }));
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
-
-
-app.get("/fetchData", async (req, res) => {
-    try {
-        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
-        const page = await browser.newPage();
-        const baseURL = 'https://www.nba.com/games';
-        const boxURL = await fetchBoxURL(baseURL);
-        const today = moment().format('YYYY-MM-DD');
-        const bigData = [];
-        const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
-        const title = JSON.parse(table.title);
-        const thLength = title.length;
-        for (let i = 0; i < boxURL.length; i++) {
-            await page.goto(boxURL[i]);
-            await page.waitForSelector('td', { timeout: 30000 });
-
-            let tds = await page.$$eval('td', (tds, thLength) => {
-                let _rows = [];
-                for (let j = 0; j < tds.length; j++) {
-                    let tdText = tds[j].innerText;
-                    if (tdText.indexOf('DNP') !== -1 || tdText.indexOf('Injury') !== -1 || tdText.indexOf('Illness') !== -1 || tdText.indexOf('NWT') !== -1) {
-                        _rows.pop();
-                        continue;
-                    } else if (tdText.indexOf('TOTALS') !== -1) {
-                        j += thLength - 1;
-                        continue;
-                    }
-                    else {
-                        let index = tdText.indexOf('\n');
-                        if (index !== -1) {
-                            tdText = tdText.substring(0, index);
-                        }
-                        _rows.push(tdText);
-                    }
-                }
-                return _rows;
-            }, thLength);
-            bigData.push(tds);
-        }
-        await browser.close();
-        let data = await handleBigData(bigData, title);
-        data  = JSON.stringify(data);
-        gameRecord.findOne({ where: { gameDate: today } })
-            .then(record => {
-                if (!record) {
-                    gameRecord.create({
-                        gameDate: today,
-                        bigData: data,
-                    }).then(record => record);
-                } else {
-                    record.bigData = data;
-                    return record.save();
-                }
-
-            })
-            .then(record => res.render("home"))
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-app.get("/fetchTableHead", async (req, res) => {
-    try {
-        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
-        const page = await browser.newPage();
-        const baseURL = 'https://www.nba.com/games';
-        const boxURL = await fetchBoxURL(baseURL);
-        await page.goto(boxURL[0]); //找一個box抓就好
-        await page.waitForSelector('th', { timeout: 30000 });
-
-        let tableHead = await page.$$eval('th', ths => {
-            const rows = [];
-            for (let i = 0; i < ths.length / 2; i++) {
-                rows.push(ths[i].innerText);
-            }
-            return rows;
-        });
-        tableHead = JSON.stringify(tableHead);
-        statisTitle.findOne({ where: { id: 1 } }).then(title => {
-            if (title) {
-                title.title = tableHead;
-                return title.save();
-            } else {
-                statisTitle.create({
-                    title: tableHead
-                }).then(title => title)
-            }
-        })
-            .then(title => res.render("home"));
-    } catch (error) {
-        console.log(error);
-    }
-})
 
 app.get("/hot", (req, res) => {
 
@@ -179,6 +97,99 @@ app.get("/dailyReport", async (req, res) => {
 
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`));
+
+
+async function fetchTableHead () {
+    try {
+        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
+        const page = await browser.newPage();
+        const baseURL = 'https://www.nba.com/games';
+        const boxURL = await fetchBoxURL(baseURL);
+        await page.goto(boxURL[0]); //找一個box抓就好
+        await page.waitForSelector('th', { timeout: 30000 });
+
+        let tableHead = await page.$$eval('th', ths => {
+            const rows = [];
+            for (let i = 0; i < ths.length / 2; i++) {
+                rows.push(ths[i].innerText);
+            }
+            return rows;
+        });
+        tableHead = JSON.stringify(tableHead);
+        statisTitle.findOne({ where: { id: 1 } }).then(title => {
+            if (title) {
+                title.title = tableHead;
+                return title.save();
+            } else {
+                statisTitle.create({
+                    title: tableHead
+                }).then(title => title)
+            }
+        })
+            .then(title => res.render("home"));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function fetchData() {
+    try {
+        const browser = await puppeteer.launch({ executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" });
+        const page = await browser.newPage();
+        const baseURL = 'https://www.nba.com/games';
+        const boxURL = await fetchBoxURL(baseURL);
+        const today = moment().format('YYYY-MM-DD');
+        const bigData = [];
+        const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
+        const title = JSON.parse(table.title);
+        const thLength = title.length;
+        for (let i = 0; i < boxURL.length; i++) {
+            await page.goto(boxURL[i]);
+            await page.waitForSelector('td', { timeout: 30000 });
+
+            let tds = await page.$$eval('td', (tds, thLength) => {
+                let _rows = [];
+                for (let j = 0; j < tds.length; j++) {
+                    let tdText = tds[j].innerText;
+                    if (tdText.indexOf('DNP') !== -1 || tdText.indexOf('Injury') !== -1 || tdText.indexOf('Illness') !== -1 || tdText.indexOf('NWT') !== -1) {
+                        _rows.pop();
+                        continue;
+                    } else if (tdText.indexOf('TOTALS') !== -1) {
+                        j += thLength - 1;
+                        continue;
+                    }
+                    else {
+                        let index = tdText.indexOf('\n');
+                        if (index !== -1) {
+                            tdText = tdText.substring(0, index);
+                        }
+                        _rows.push(tdText);
+                    }
+                }
+                return _rows;
+            }, thLength);
+            bigData.push(tds);
+        }
+        await browser.close();
+        let data = await handleBigData(bigData, title);
+        data  = JSON.stringify(data);
+        gameRecord.findOne({ where: { gameDate: today } })
+            .then(record => {
+                if (!record) {
+                    gameRecord.create({
+                        gameDate: today,
+                        bigData: data,
+                    }).then(record => record);
+                } else {
+                    record.bigData = data;
+                    return record.save();
+                }
+
+            })
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 function fetchBoxURL(baseURL) {
 
