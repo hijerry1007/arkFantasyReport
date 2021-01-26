@@ -9,6 +9,7 @@ const cheerio = require("cheerio");
 const moment = require('moment');
 const puppeteer = require('puppeteer');
 const db = require('./models');
+const { all } = require('sequelize/types/lib/operators');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
 
@@ -128,6 +129,22 @@ app.get("/hot", (req, res) => {
     }).catch(function (error) {
         console.error(error);
     });
+});
+
+app.get("/dailyReport", (req, res) => {
+    const today = moment().format('YYYY-MM-DD');
+    gameRecord.findOne({ where: { gameDate: today } })
+        .then((result) => {
+            if (!result){
+                console.log("error, no data");
+            }
+            let bigData = result.bigData;
+            let data = handleBigData(bigData);
+
+            res.render("dailyReport", { data: data });
+
+
+        })
 })
 
 
@@ -163,29 +180,26 @@ async function handleBigData(bigData) {
     const table = await statisTitle.findOne({ where: { id: 1 } }).then(title => title.get());
     const title = JSON.parse(table.title);
     const tableLength = title.length;
-    const data = {};
+    const data = [];
     for (let i = 0; i < bigData.length; i++) {
         let gameStatis = bigData[i];
         while(gameStatis.length > 0 ){
             let statis = gameStatis.splice(0, tableLength);
-            let playerStatis = await checkDouble(title, statis);
-            if(data[playerStatis.performance] === undefined){
-                data[playerStatis.performance] = [];
-            }
-            data[playerStatis.performance].push(playerStatis);
+            let playerStatis = await getPlayerData(title, statis);
+            data.push(playerStatis);
         }
     }
     return data;
 }
 
-function checkDouble (title, statis){
+function getPlayerData (title, statis){
     return new Promise((resolve, reject) => {
         const playerStatis = {}
         let count = 0;
         for (let i = 0 ; i < title.length ; i++){
-            let title = title[i];
+            let _title = title[i];
             let _statis = statis[i];
-            switch(title){
+            switch(_title){
                 case "PTS":
                     if(_statis > 9) count++;
                     break;
@@ -204,7 +218,7 @@ function checkDouble (title, statis){
                 default:
                     break;
             }
-            playerStatis[title] = _statis;
+            playerStatis[_title] = _statis;
         }
         
         if(count === 0 || count === 1){
