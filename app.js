@@ -34,10 +34,12 @@ app.use(express.static('public'));
 
 app.get("/", (req, res) => {
     fetchTableHead();
+    res.render('home')
 })
 
 app.get("/fetch", (req, res) => {
     fetchData();
+    res.render('home')
 })
 
 
