@@ -138,6 +138,15 @@ app.get("/dailyReport", async (req, res) => {
                 console.log("error, no data");
             }
             let bigData = JSON.parse(result.bigData);
+            let PTS = bigData.sort((a,b) => b.PTS-a.PTS).slice(0,5);
+            let REB = bigData.sort((a,b) => b.REB-a.REB).slice(0,5);
+            let AST = bigData.sort((a,b) => b.AST-a.AST).slice(0,5);
+            let STL = bigData.sort((a,b) => b.STL-a.STL).slice(0,5);
+            let BLK = bigData.sort((a,b) => b.BLK-a.BLK).slice(0,5);
+            let THREE = bigData.sort((a,b) => b['3PM'] -a['3PM']).slice(0,5);
+            let TO = bigData.sort((a,b) => b.TO-a.TO).slice(0,5);
+            let FT = bigData.sort((a,b) => b.FTA-a.FTA).slice(0,5);
+            let FGA = bigData.sort((a,b) => b.FGA-a.FGA).slice(0,5);
             let double = [];
             let triple = [];
             let quadra = []
@@ -164,7 +173,7 @@ app.get("/dailyReport", async (req, res) => {
             triple.sort((a,b) => b.PTS-a.PTS);
             quadra.sort((a,b) => b.PTS-a.PTS)
             five.sort((a,b) => b.PTS-a.PTS)
-            res.render("dailyReport", { double, triple, quadra, five });
+            res.render("dailyReport", { PTS, REB, AST, STL, BLK, THREE, TO, FGA, FT, double, triple, quadra, five });
         })
 })
 
