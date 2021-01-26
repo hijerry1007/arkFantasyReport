@@ -160,6 +160,10 @@ app.get("/dailyReport", async (req, res) => {
                         break;
                 }
             }
+            double.sort((a,b) => b.PTS-a.PTS);
+            triple.sort((a,b) => b.PTS-a.PTS);
+            quadra.sort((a,b) => b.PTS-a.PTS)
+            five.sort((a,b) => b.PTS-a.PTS)
             res.render("dailyReport", { double, triple, quadra, five });
         })
 })
