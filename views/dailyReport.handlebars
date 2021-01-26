@@ -1,54 +1,110 @@
-<div class="div">
-    {{#each THREE}}
-    <div class="div">{{this.PLAYER}}</div>
-    <div class="div">{{this.PTS}}</div>
-    <div class="div">{{this.MIN}}</div>
-    <div class="div">{{this.FGM}}</div>
-    <div class="div">{{this.FGA}}</div>
-    <div class="div">{{this.[FG%]}}</div>
-    {{/each}}
-</div>
-
-<div class="div">
-    {{#each double}}
-    <div class="div">{{this.PLAYER}}</div>
-    <div class="div">{{this.PTS}}</div>
-    <div class="div">{{this.MIN}}</div>
-    <div class="div">{{this.FGM}}</div>
-    <div class="div">{{this.FGA}}</div>
-    <div class="div">{{this.[FG%]}}</div>
-    {{/each}}
-</div>
-
-<div class="div">
-    {{#each triple}}
-    <div class="div">{{this.PLAYER}}</div>
-    <div class="div">{{this.PTS}}</div>
-    <div class="div">{{this.MIN}}</div>
-    <div class="div">{{this.FGM}}</div>
-    <div class="div">{{this.FGA}}</div>
-    <div class="div">{{this.[FG%]}}</div>
-    {{/each}}
-</div>
-
-<div class="div">
-    {{#each quadra}}
-    <div class="div">{{this.PLAYER}}</div>
-    <div class="div">{{this.PTS}}</div>
-    <div class="div">{{this.MIN}}</div>
-    <div class="div">{{this.FGM}}</div>
-    <div class="div">{{this.FGA}}</div>
-    <div class="div">{{this.[FG%]}}</div>
-    {{/each}}
-</div>
-
-<div class="div">
-    {{#each five}}
-    <div class="div">{{this.PLAYER}}</div>
-    <div class="div">{{this.PTS}}</div>
-    <div class="div">{{this.MIN}}</div>
-    <div class="div">{{this.FGM}}</div>
-    <div class="div">{{this.FGA}}</div>
-    <div class="div">{{this.[FG%]}}</div>
-    {{/each}}
+<div class="wrap">
+    <div class="box">
+        <div class="title">
+            得分前五
+        </div>
+        <div class="statisBox">
+            <ol>
+            {{#each PTS}}
+            <li>{{this.PLAYER}} {{this.PTS}} {{this.REB}} {{this.STL}}</li>
+            {{/each}}
+            </ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            籃板前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each REB}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            助攻前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each AST}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            抄截前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each STL}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            火鍋前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each BLK}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            三分前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each THREE}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            失誤前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each TO}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            買飯前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each FT}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            自幹前五
+        </div>
+        <div class="statisBox">
+            <ol>{{#each FGA}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            DoubleDouble
+        </div>
+        <div class="statisBox">
+            <ol>{{#each double}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            大三元
+        </div>
+        <div class="statisBox">
+            <ol>{{#each triple}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            大四喜
+        </div>
+        <div class="statisBox">
+            <ol>{{#each quadra}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
+    <div class="box">
+        <div class="title">
+            五福臨門
+        </div>
+        <div class="statisBox">
+            <ol>{{#each five}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+        </div>
+    </div>
 </div>

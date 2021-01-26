@@ -3,7 +3,6 @@ const handlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-const axios = require('axios').default;
 const request = require("request");
 const cheerio = require("cheerio");
 const moment = require('moment');
@@ -32,20 +31,6 @@ app.engine('handlebars', handlebars({
 }));
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
-
-app.get("/hot", (req, res) => {
-
-    const options = {
-        method: 'GET',
-        url: 'https://stats.nba.com/js/data/widgets/home_daily.json',
-    };
-    axios.request(options).then(function (response) {
-        const items = response.data.items[0].items;
-        res.render("hot", { items: items });
-    }).catch(function (error) {
-        console.error(error);
-    });
-});
 
 app.get("/dailyReport", async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
