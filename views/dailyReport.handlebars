@@ -7,7 +7,7 @@
             <ol>
                 {{#each PTS}}
                 <li>{{this.PLAYER}} {{this.PTS}}分 {{this.REB}}板 {{this.AST}}助攻 {{this.STL}}抄 {{this.[3PM]}}三分命中
-                    {{this.[FG%]}}命中率</li>
+                    {{this.[FG%]}}%命中率</li>
                 {{/each}}
             </ol>
         </div>
@@ -49,7 +49,8 @@
             三分前五
         </div>
         <div class="statisBox">
-            <ol>{{#each THREE}}<li>{{this.PLAYER}} {{this.[3PM]}}中{{this.[3PA]}}投 {{this.[3P%]}}三分命中率</li>{{/each}}</ol>
+            <ol>{{#each THREE}}<li>{{this.PLAYER}} {{this.[3PA]}}投{{this.[3PM]}}中 {{this.[3P%]}}%三分命中率</li>{{/each}}
+            </ol>
         </div>
     </div>
     <div class="box">
@@ -65,7 +66,7 @@
             買飯前五
         </div>
         <div class="statisBox">
-            <ol>{{#each FT}}<li>{{this.PLAYER}} {{this.FT}}中{{this.FTA}}投</li>{{/each}}</ol>
+            <ol>{{#each FT}}<li>{{this.PLAYER}} {{this.FTA}}投{{this.FTM}}中</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -73,7 +74,7 @@
             自幹前五
         </div>
         <div class="statisBox">
-            <ol>{{#each FGA}}<li>{{this.PLAYER}} {{this.FGM}}中{{this.FGA}}投</li>{{/each}}</ol>
+            <ol>{{#each FGA}}<li>{{this.PLAYER}} {{this.FGA}}投{{this.FGM}}中 {{this.[FG%]}}%命中率</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
