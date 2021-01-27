@@ -5,9 +5,9 @@
         </div>
         <div class="statisBox">
             <ol>
-            {{#each PTS}}
-            <li>{{this.PLAYER}} {{this.PTS}} {{this.REB}} {{this.STL}}</li>
-            {{/each}}
+                {{#each PTS}}
+                <li>{{this.PLAYER}} {{this.PTS}}分 {{this.REB}}板 {{this.AST}}助攻 {{this.STL}}抄 {{this.[3PM]}}三分命中</li>
+                {{/each}}
             </ol>
         </div>
     </div>
@@ -16,7 +16,7 @@
             籃板前五
         </div>
         <div class="statisBox">
-            <ol>{{#each REB}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each REB}}<li>{{this.PLAYER}} {{this.REB}}板</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -24,7 +24,7 @@
             助攻前五
         </div>
         <div class="statisBox">
-            <ol>{{#each AST}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each AST}}<li>{{this.PLAYER}} {{this.AST}}助攻</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -32,7 +32,7 @@
             抄截前五
         </div>
         <div class="statisBox">
-            <ol>{{#each STL}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each STL}}<li>{{this.PLAYER}} {{this.STL}}抄</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -40,7 +40,7 @@
             火鍋前五
         </div>
         <div class="statisBox">
-            <ol>{{#each BLK}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each BLK}}<li>{{this.PLAYER}} {{this.BLK}}鍋</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -48,7 +48,7 @@
             三分前五
         </div>
         <div class="statisBox">
-            <ol>{{#each THREE}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each THREE}}<li>{{this.PLAYER}} {{this.[3PM]}} / {{this.[3PA]}}</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -56,7 +56,7 @@
             失誤前五
         </div>
         <div class="statisBox">
-            <ol>{{#each TO}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each TO}}<li>{{this.PLAYER}} {{this.TO}}</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -64,7 +64,7 @@
             買飯前五
         </div>
         <div class="statisBox">
-            <ol>{{#each FT}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each FT}}<li>{{this.PLAYER}} {{this.FT}}/{{this.FTA}}</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -72,7 +72,7 @@
             自幹前五
         </div>
         <div class="statisBox">
-            <ol>{{#each FGA}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each FGA}}<li>{{this.PLAYER}} {{this.FGM}}/{{this.FGA}}</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -80,7 +80,8 @@
             DoubleDouble
         </div>
         <div class="statisBox">
-            <ol>{{#each double}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each double}}<li>{{this.PLAYER}} {{this.PTS}}分 {{this.REB}}板 {{this.AST}}助攻 {{this.STL}}抄
+                    {{this.BLK}}鍋</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -88,7 +89,8 @@
             大三元
         </div>
         <div class="statisBox">
-            <ol>{{#each triple}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each triple}}<li>{{this.PLAYER}} {{this.PTS}}分 {{this.REB}}板 {{this.AST}}助攻 {{this.STL}}抄
+                    {{this.BLK}}鍋</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -96,7 +98,8 @@
             大四喜
         </div>
         <div class="statisBox">
-            <ol>{{#each quadra}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each quadra}}<li>{{this.PLAYER}} {{this.PTS}}分 {{this.REB}}板 {{this.AST}}助攻 {{this.STL}}抄
+                    {{this.BLK}}鍋</li>{{/each}}</ol>
         </div>
     </div>
     <div class="box">
@@ -104,7 +107,8 @@
             五福臨門
         </div>
         <div class="statisBox">
-            <ol>{{#each five}}<li>{{this.PLAYER}}</li>{{/each}}</ol>
+            <ol>{{#each five}}<li>{{this.PLAYER}} {{this.PTS}}分 {{this.REB}}板 {{this.AST}}助攻 {{this.STL}}抄
+                    {{this.BLK}}鍋</li>{{/each}}</ol>
         </div>
     </div>
 </div>

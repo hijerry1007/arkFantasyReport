@@ -3,21 +3,35 @@
     padding: 0;
 }
 
+body {
+    background: #000;
+}
 
+.wrap {
+  width: 80%;
+  margin: 0 auto;
+  height: auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center; 
+}
+
+.box {
+  color: white;
+  min-width: 60%;
+  margin: 1rem;
+}
 .title {
     font-size: 24px;
     font-weight: 600;
-    color: rgb(28, 28, 145);
     border-bottom: 1px solid rgb(155, 155, 155);
 }
 
-.statisBox {
-    display: flex; 
-    flex-flow: column;
-    width: 475px;
-    max-width: 475px;
-    margin: 3rem auto 0;
+.statisBox{
+  padding: 0 20px;
 }
+
 
 .statisBox ol{
     margin-left: 1.25rem;
