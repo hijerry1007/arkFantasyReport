@@ -22,8 +22,7 @@ let fetchBoxData = cron.schedule('0,30 00,10,14 * * *', () => {
 }, { timezone: 'Asia/Shanghai' })
 fetchHead.start();
 fetchBoxData.start();
-fetchData();
-
+fetchData()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.engine('handlebars', handlebars({
@@ -89,13 +88,13 @@ async function fetchTableHead() {
     try {
         const browser = await puppeteer.launch({
             headless: true, args: [
-                "–disable-gpu",
-                "–disable-dev-shm-usage",
-                "–disable-setuid-sandbox",
-                "–no-first-run",
-                "–no-sandbox",
-                "–no-zygote",
-                "–single-process"
+                "–-disable-gpu",
+                "–-disable-dev-shm-usage",
+                "–-disable-setuid-sandbox",
+                "–-no-first-run",
+                "–-no-sandbox",
+                "–-no-zygote",
+                "–-single-process"
             ]
         });
         const page = await browser.newPage();
@@ -131,13 +130,13 @@ async function fetchData() {
     try {
         const browser = await puppeteer.launch({
             headless: true, args: [
-                "–disable-gpu",
-                "–disable-dev-shm-usage",
-                "–disable-setuid-sandbox",
-                "–no-first-run",
-                "–no-sandbox",
-                "–no-zygote",
-                "–single-process"
+                "–-disable-gpu",
+                "–-disable-dev-shm-usage",
+                "–-disable-setuid-sandbox",
+                "–-no-first-run",
+                "–-no-sandbox",
+                "–-no-zygote",
+                "–-single-process"
             ]
         });
         const page = await browser.newPage();
