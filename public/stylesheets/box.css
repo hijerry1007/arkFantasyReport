@@ -40,3 +40,10 @@ body {
     font-weight: 500;
 }
 
+
+@media screen and (max-width: 768px) {
+  .box {
+    min-width: 85%;
+    max-width: 85%;
+  }
+}
