@@ -88,13 +88,7 @@ async function fetchTableHead() {
     try {
         const browser = await puppeteer.launch({
             headless: true, args: [
-                "–-disable-gpu",
-                "–-disable-dev-shm-usage",
-                "–-disable-setuid-sandbox",
-                "–-no-first-run",
-                "–-no-sandbox",
-                "–-no-zygote",
-                "–-single-process"
+                '--disable-gpu', '--single-process', '--no-zygote', '--no-sandbox', '--hide-scrollbars'
             ]
         });
         const page = await browser.newPage();
@@ -130,13 +124,7 @@ async function fetchData() {
     try {
         const browser = await puppeteer.launch({
             headless: true, args: [
-                "–-disable-gpu",
-                "–-disable-dev-shm-usage",
-                "–-disable-setuid-sandbox",
-                "–-no-first-run",
-                "–-no-sandbox",
-                "–-no-zygote",
-                "–-single-process"
+                '--disable-gpu', '--single-process', '--no-zygote', '--no-sandbox', '--hide-scrollbars'
             ]
         });
         const page = await browser.newPage();
