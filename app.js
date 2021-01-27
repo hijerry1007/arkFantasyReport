@@ -36,8 +36,10 @@ app.get("/dailyReport", async (req, res) => {
 
     gameRecord.findOne({ where: { gameDate: today } })
         .then((result) => {
-            if (!result) {
+            if (!result || result.length == 0) {
                 console.log("error, no data");
+                const PTS, REB, AST, STL, BLK, THREE, TO, FGA, FT, double, triple, quadra, five = [];
+                res.render("dailyReport", { PTS, REB, AST, STL, BLK, THREE, TO, FGA, FT, double, triple, quadra, five });
             }
             let bigData = JSON.parse(result.bigData);
             let PTS = bigData.sort((a, b) => b.PTS - a.PTS).slice(0, 5);
