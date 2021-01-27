@@ -22,7 +22,6 @@ let fetchBoxData = cron.schedule('0,30 00,10,14 * * *', () => {
 }, { timezone: 'Asia/Shanghai' })
 fetchHead.start();
 fetchBoxData.start();
-fetchData()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.engine('handlebars', handlebars({
