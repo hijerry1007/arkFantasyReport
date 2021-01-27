@@ -22,6 +22,7 @@ let fetchBoxData = cron.schedule('0,30 00,10,14 * * *', () => {
 }, { timezone: 'Asia/Shanghai' })
 fetchHead.start();
 fetchBoxData.start();
+fetchData();
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -86,7 +87,17 @@ app.listen(process.env.PORT || port, () => console.log(`Example app listening on
 
 async function fetchTableHead() {
     try {
-        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+        const browser = await puppeteer.launch({
+            headless: true, args: [
+                "–disable-gpu",
+                "–disable-dev-shm-usage",
+                "–disable-setuid-sandbox",
+                "–no-first-run",
+                "–no-sandbox",
+                "–no-zygote",
+                "–single-process"
+            ]
+        });
         const page = await browser.newPage();
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
@@ -118,7 +129,17 @@ async function fetchTableHead() {
 
 async function fetchData() {
     try {
-        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+        const browser = await puppeteer.launch({
+            headless: true, args: [
+                "–disable-gpu",
+                "–disable-dev-shm-usage",
+                "–disable-setuid-sandbox",
+                "–no-first-run",
+                "–no-sandbox",
+                "–no-zygote",
+                "–single-process"
+            ]
+        });
         const page = await browser.newPage();
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
