@@ -144,7 +144,7 @@ async function fetchData() {
                 let _rows = [];
                 for (let j = 0; j < tds.length; j++) {
                     let tdText = tds[j].innerText;
-                    if (tdText.indexOf('DNP') !== -1 || tdText.indexOf('Injury') !== -1 || tdText.indexOf('Illness') !== -1 || tdText.indexOf('NWT') !== -1 || tdText.indexOf('DND') !== -1) {
+                    if (tdText.indexOf('DNP') !== -1 || tdText.indexOf('DND') !== -1 || tdText.indexOf('Injury') !== -1 || tdText.indexOf('Illness') !== -1 || tdText.indexOf('NWT') !== -1) {
                         _rows.pop();
                         continue;
                     } else if (tdText.indexOf('TOTALS') !== -1) {
