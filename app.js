@@ -17,7 +17,7 @@ let fetchHead = cron.schedule('0 6 * * *', () => {
     fetchTableHead();
 }, { timezone: 'Asia/Shanghai' })
 
-let fetchBoxData = cron.schedule('0,30 00,10,14 * * *', () => {
+let fetchBoxData = cron.schedule('0,30 00,10,12,14 * * *', () => {
     fetchData();
 }, { timezone: 'Asia/Shanghai' })
 fetchTableHead();
