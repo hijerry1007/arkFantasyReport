@@ -20,6 +20,7 @@ let fetchHead = cron.schedule('0 6 * * *', () => {
 let fetchBoxData = cron.schedule('0,30 00,10,14 * * *', () => {
     fetchData();
 }, { timezone: 'Asia/Shanghai' })
+fetchData();
 fetchHead.start();
 fetchBoxData.start();
 app.use(bodyParser.urlencoded({ extended: true }))
