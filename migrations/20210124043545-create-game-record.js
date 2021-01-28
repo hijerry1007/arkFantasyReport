@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       bigData: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT('long')
       },
       createdAt: {
         allowNull: false,
