@@ -175,8 +175,13 @@ async function fetchData() {
                         bigData: data,
                     }).then(record => record);
                 } else {
-                    record.bigData = data;
-                    return record.save();
+
+                    record.update({
+                        gameDate: today,
+                        bigData: data
+                    })
+                    console.log("成功更新資料")
+                    return
                 }
 
             })
