@@ -21,7 +21,7 @@ let fetchBoxData = cron.schedule('0,30 00,10,12,14 * * *', () => {
     fetchData();
 }, { timezone: 'Asia/Shanghai' })
 
-
+fetchData();
 fetchHead.start();
 fetchBoxData.start();
 app.use(bodyParser.urlencoded({ extended: true }))
