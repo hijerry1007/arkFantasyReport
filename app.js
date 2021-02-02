@@ -30,6 +30,16 @@ let fetchBoxData = cron.schedule('0,30 00,10,12,14 * * *', () => {
 
 fetchHead.start();
 fetchBoxData.start();
+
+app.post("/webhook", line.middleware(lineConfig), async (req, res) => {
+    try {
+        let result = await req.body.events.map(handleEvent);
+        res.json(result);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.engine('handlebars', handlebars({
@@ -38,15 +48,6 @@ app.engine('handlebars', handlebars({
 }));
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
-
-app.post("/", line.middleware(lineConfig), async (req, res) => {
-    try {
-        let result = await req.body.events.map(handleEvent);
-        res.json(result);
-    } catch (error) {
-        console.log(error);
-    }
-})
 
 app.get("/dailyReport", async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
