@@ -11,13 +11,13 @@ const cron = require("node-cron");
 const db = require('./models');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
-const Client = require('@line/bot-sdk').Client;
-const middleware = require('@line/bot-sdk').middleware;
+const line = require('@line/bot-sdk');
 const lineConfig = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET
 };
-const client = new Client(lineConfig);
+
+const client = new line.Client(lineConfig);
 
 
 let fetchHead = cron.schedule('0 6 * * *', () => {
@@ -39,7 +39,7 @@ app.engine('handlebars', handlebars({
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
 
-app.post("/", middleware(lineConfig), async (req, res) => {
+app.post("/", line.middleware(lineConfig), async (req, res) => {
     try {
         let result = await req.body.events.map(handleEvent);
         res.json(result);
