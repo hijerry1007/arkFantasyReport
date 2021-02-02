@@ -92,8 +92,8 @@ app.get("/dailyReport", async (req, res) => {
             }
             double.sort((a, b) => b.PTS - a.PTS);
             triple.sort((a, b) => b.PTS - a.PTS);
-            quadra.sort((a, b) => b.PTS - a.PTS)
-            five.sort((a, b) => b.PTS - a.PTS)
+            quadra.sort((a, b) => b.PTS - a.PTS);
+            five.sort((a, b) => b.PTS - a.PTS);
             res.render("dailyReport", { PTS, REB, AST, STL, BLK, THREE, TO, FGA, FT, double, triple, quadra, five });
         })
 })
@@ -326,13 +326,34 @@ const textHandler = (replyToken, inputText) => {
                 resText = `測試`;
                 break
             case '賴賴':
-                resText = '阿比我愛妳'
-            //             case 'Q&A':
-            //                 return client.replyMessage(replyToken, imageMap());
-            //             case 'q&a':
-            //                 return client.replyMessage(replyToken, carousel());
+                resText = '阿比我愛妳';
+                break
+            case 'lailai':
+                resText = '阿比我愛妳';
+                break
+            case '戰報':
+                const today = moment().format('YYYY-MM-DD');
+                const result = await gameRecord.findOne({ where: { gameDate: today } })
+
+                if (!result || result.length == 0) {
+                    console.log("error, no data");
+                    resText = "No data";
+                }
+                let bigData = JSON.parse(result.bigData);
+                let double = [];
+                for (let i = 0; i < bigData.length; i++) {
+                    switch (bigData[i].performance) {
+                        case "doubleDouble":
+                            double.push(bigData[i]);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                resText = JSON.stringify(double);
+                break
             default:
-                resText = '請親臨院所';
+                resText = '阿科羅伯特';
         }
         return client.replyMessage(replyToken, {
             type: 'text',
