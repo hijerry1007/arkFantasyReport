@@ -11,7 +11,8 @@ const cron = require("node-cron");
 const db = require('./models');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
-import { Client, middleware } from '@line/bot-sdk';
+const { Client } = require('@line/bot-sdk');
+const { middleware } = require('@line/bot-sdk');
 const lineConfig = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET
