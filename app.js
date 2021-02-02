@@ -315,7 +315,7 @@ const handleEvent = (event) => {
     }
 }
 
-const textHandler = (replyToken, inputText) => {
+const textHandler = async (replyToken, inputText) => {
     try {
         let resText;
         switch (inputText) {
