@@ -11,8 +11,8 @@ const cron = require("node-cron");
 const db = require('./models');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
-const { Client } = require('@line/bot-sdk');
-const { middleware } = require('@line/bot-sdk');
+const Client = require('@line/bot-sdk').Client;
+const middleware = require('@line/bot-sdk').middleware;
 const lineConfig = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET
@@ -28,7 +28,6 @@ let fetchBoxData = cron.schedule('0,30 00,10,12,14 * * *', () => {
     fetchData();
 }, { timezone: 'Asia/Shanghai' })
 
-fetchData();
 fetchHead.start();
 fetchBoxData.start();
 app.use(bodyParser.urlencoded({ extended: true }))
