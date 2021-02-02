@@ -11,6 +11,12 @@ const cron = require("node-cron");
 const db = require('./models');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
+import { Client, middleware } from '@line/bot-sdk';
+const lineConfig = {
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+    channelSecret: process.env.CHANNEL_SECRET
+};
+const client = new Client(lineConfig);
 
 
 let fetchHead = cron.schedule('0 6 * * *', () => {
@@ -32,6 +38,15 @@ app.engine('handlebars', handlebars({
 }));
 app.set('view engine', 'handlebars');
 app.use(express.static('public'));
+
+app.post("/", middleware(lineConfig), async (req, res) => {
+    try {
+        let result = await req.body.events.map(handleEvent);
+        res.json(result);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 app.get("/dailyReport", async (req, res) => {
     const today = moment().format('YYYY-MM-DD');
@@ -275,4 +290,55 @@ function getPlayerData(title, statis) {
 
         resolve(playerStatis)
     })
+}
+
+const handleEvent = (event) => {
+    switch (event.type) {
+        case 'join': //這隻機器人加入別人的群組
+            break;
+        case 'follow': //追蹤這隻機器人
+            break;
+        case 'message': //傳訊息給機器人
+            switch (event.message.type) {
+                case 'text':
+                    textHandler(event.replyToken, event.message.text);   //測試code就不用這行
+                    //             return client.replyMessage(replyToken, {     ---->    測試用code通常就是呼叫client.replyMessage，並依api要求格式回傳
+                    //                 type: 'text',
+                    //                 text: event.message.text  ----> 我們傳給機器人的文字會在這裡面
+                    //             });
+                    break;
+                case 'sticker':
+                    // do sth with sticker
+                    return
+            }
+    }
+}
+
+const textHandler = (replyToken, inputText) => {
+    try {
+        let resText;
+        switch (inputText) {
+            case '你好':
+                resText = '你好啊';
+                break;
+            case 'test':
+                resText = `測試`;
+                break
+            case '賴賴':
+                resText = '阿比我愛妳'
+            //             case 'Q&A':
+            //                 return client.replyMessage(replyToken, imageMap());
+            //             case 'q&a':
+            //                 return client.replyMessage(replyToken, carousel());
+            default:
+                resText = '請親臨院所';
+        }
+        return client.replyMessage(replyToken, {
+            type: 'text',
+            text: resText
+        });
+    } catch (err) {
+        console.log(err)
+    }
+
 }
