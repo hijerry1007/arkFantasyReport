@@ -114,7 +114,7 @@ async function fetchTableHead() {
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
         await page.goto(boxURL[0]); //找一個box抓就好
-        await page.waitForSelector('th', { timeout: 0 });
+        await page.waitForSelector('th', { timeout: 30000 });
 
         let tableHead = await page.$$eval('th', ths => {
             const rows = [];
@@ -155,8 +155,8 @@ async function fetchData() {
         const title = JSON.parse(table.title);
         const thLength = title.length;
         for (let i = 0; i < boxURL.length; i++) {
-            await page.goto(boxURL[i]);
-            await page.waitForSelector('td', { timeout: 0 });
+            await page.goto(boxURL[i], { timeout: 60000, waitUntil: 'domcontentloaded' });
+            await page.waitForSelector('td', { timeout: 30000 });
 
             let tds = await page.$$eval('td', (tds, thLength) => {
                 let _rows = [];
