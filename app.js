@@ -113,7 +113,7 @@ async function fetchTableHead() {
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
         await page.goto(boxURL[0]); //找一個box抓就好
-        await page.waitForSelector('th', { timeout: 30000 });
+        await page.waitForSelector('th', { timeout: 60000 });
 
         let tableHead = await page.$$eval('th', ths => {
             const rows = [];
@@ -155,7 +155,7 @@ async function fetchData() {
         const thLength = title.length;
         for (let i = 0; i < boxURL.length; i++) {
             await page.goto(boxURL[i]);
-            await page.waitForSelector('td', { timeout: 30000 });
+            await page.waitForSelector('td', { timeout: 60000 });
 
             let tds = await page.$$eval('td', (tds, thLength) => {
                 let _rows = [];
@@ -302,11 +302,7 @@ const handleEvent = (event) => {
         case 'message': //傳訊息給機器人
             switch (event.message.type) {
                 case 'text':
-                    textHandler(event.replyToken, event.message.text);   //測試code就不用這行
-                    //             return client.replyMessage(replyToken, {     ---->    測試用code通常就是呼叫client.replyMessage，並依api要求格式回傳
-                    //                 type: 'text',
-                    //                 text: event.message.text  ----> 我們傳給機器人的文字會在這裡面
-                    //             });
+                    textHandler(event.replyToken, event.message.text);
                     break;
                 case 'sticker':
                     // do sth with sticker
@@ -340,17 +336,12 @@ const textHandler = async (replyToken, inputText) => {
                     resText = "No data";
                 }
                 let bigData = JSON.parse(result.bigData);
-                let double = [];
+                let str = '';
                 for (let i = 0; i < bigData.length; i++) {
-                    switch (bigData[i].performance) {
-                        case "doubleDouble":
-                            double.push(bigData[i]);
-                            break;
-                        default:
-                            break;
-                    }
+                    str += `${bigData[i].Player} ${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 `;
+                    str += `${bigData[i].BLK}鍋 ${bigData[i].TO}失誤 %0D%0A`;
                 }
-                resText = JSON.stringify(double);
+                resText = str;
                 break
             default:
                 resText = '阿科羅伯特';
