@@ -111,10 +111,11 @@ async function fetchTableHead() {
             ]
         });
         const page = await browser.newPage();
+        page.setDefaultTimeout(60000);
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
         await page.goto(boxURL[0]); //找一個box抓就好
-        await page.waitForSelector('th', { timeout: 60000 });
+        await page.waitForSelector('th');
 
         let tableHead = await page.$$eval('th', ths => {
             const rows = [];
@@ -147,6 +148,7 @@ async function fetchData() {
             ]
         });
         const page = await browser.newPage();
+        page.setDefaultTimeout(60000);
         const baseURL = 'https://www.nba.com/games';
         const boxURL = await fetchBoxURL(baseURL);
         const today = moment().format('YYYY-MM-DD');
@@ -156,7 +158,7 @@ async function fetchData() {
         const thLength = title.length;
         for (let i = 0; i < boxURL.length; i++) {
             await page.goto(boxURL[i]);
-            await page.waitForSelector('td', { timeout: 60000 });
+            await page.waitForSelector('td');
 
             let tds = await page.$$eval('td', (tds, thLength) => {
                 let _rows = [];
