@@ -332,48 +332,52 @@ const textHandler = async (replyToken, inputText) => {
                 }
                 let bigData = JSON.parse(result.bigData);
                 resText = {
-                    "type": "bubble",
-                    "hero": {
-                        "type": "image",
-                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
-                        "size": "full",
-                        "aspectRatio": "20:13",
-                        "aspectMode": "cover",
-                        "action": {
-                            "type": "uri",
-                            "uri": "http://linecorp.com/"
+                    "type": "flex",
+                    "altText": "This is a Flex Message",
+                    "contents": {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover",
+                            "action": {
+                                "type": "uri",
+                                "uri": "http://linecorp.com/"
+                            }
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "戰報",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                            ]
                         }
-                    },
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": "戰報",
-                                "weight": "bold",
-                                "size": "xl"
-                            },
-                        ]
                     }
                 };
                 for (let i = 0; i < bigData.length; i++) {
-                    resText['body'].contents.push({
+                    resText['contents']['body'].contents.push({
                         "type": "box",
                         "layout": "vertical",
                         "margin": "lg",
                         "spacing": "sm",
                         "contents": [],
                     })
-                    let length = temp['body'].contents.length;
-                    resText['body'].contents[length - 1]['contents'].push({
+                    let length = temp['contents']['body'].contents.length;
+                    resText['contents']['body'].contents[length - 1]['contents'].push({
                         "type": "text",
                         "text": `${bigData[i].PLAYER}`,
                         "color": "#aaaaaa",
                         "size": "sm",
                         "flex": 1
                     })
-                    resText['body'].contents[length - 1]['contents'].push({
+                    resText['contents']['body'].contents[length - 1]['contents'].push({
                         "type": "text",
                         "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
                         "wrap": true,
