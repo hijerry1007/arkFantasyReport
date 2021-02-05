@@ -361,33 +361,33 @@ const textHandler = async (replyToken, inputText) => {
                         }
                     }
                 };
-                for (let i = 0; i < bigData.length; i++) {
-                    if (bigData[i].performance = "doubleDouble") {
-                        resText['contents']['body'].contents.push({
-                            "type": "box",
-                            "layout": "vertical",
-                            "margin": "lg",
-                            "spacing": "sm",
-                            "contents": [],
-                        })
-                        let length = resText['contents']['body'].contents.length;
-                        resText['contents']['body'].contents[length - 1]['contents'].push({
-                            "type": "text",
-                            "text": `${bigData[i].PLAYER}`,
-                            "color": "#aaaaaa",
-                            "size": "sm",
-                            "flex": 1
-                        })
-                        resText['contents']['body'].contents[length - 1]['contents'].push({
-                            "type": "text",
-                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
-                            "wrap": true,
-                            "color": "#666666",
-                            "size": "sm",
-                            "flex": 5
-                        })
-                    }
-                }
+                // for (let i = 0; i < bigData.length; i++) {
+                //     if (bigData[i].performance = "doubleDouble") {
+                //         resText['contents']['body'].contents.push({
+                //             "type": "box",
+                //             "layout": "vertical",
+                //             "margin": "lg",
+                //             "spacing": "sm",
+                //             "contents": [],
+                //         })
+                //         let length = resText['contents']['body'].contents.length;
+                //         resText['contents']['body'].contents[length - 1]['contents'].push({
+                //             "type": "text",
+                //             "text": `${bigData[i].PLAYER}`,
+                //             "color": "#aaaaaa",
+                //             "size": "sm",
+                //             "flex": 1
+                //         })
+                //         resText['contents']['body'].contents[length - 1]['contents'].push({
+                //             "type": "text",
+                //             "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
+                //             "wrap": true,
+                //             "color": "#666666",
+                //             "size": "sm",
+                //             "flex": 5
+                //         })
+                //     }
+                // }
                 break
             default:
                 resText = {
