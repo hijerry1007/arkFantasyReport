@@ -322,7 +322,7 @@ const textHandler = async (replyToken, inputText) => {
                     "text": '阿比我愛妳'
                 };
                 break
-            case '戰報':
+            case '雙十':
                 const today = moment().format('YYYY-MM-DD');
                 const result = await gameRecord.findOne({ where: { gameDate: today } })
 
@@ -333,7 +333,7 @@ const textHandler = async (replyToken, inputText) => {
                 let bigData = JSON.parse(result.bigData);
                 resText = {
                     "type": "flex",
-                    "altText": "This is a Flex Message",
+                    "altText": `${today}NBA戰報`,
                     "contents": {
                         "type": "bubble",
                         "hero": {
@@ -353,7 +353,7 @@ const textHandler = async (replyToken, inputText) => {
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": "戰報",
+                                    "text": "今日雙十",
                                     "weight": "bold",
                                     "size": "xl"
                                 },
@@ -362,7 +362,7 @@ const textHandler = async (replyToken, inputText) => {
                     }
                 };
                 for (let i = 0; i < bigData.length; i++) {
-                    if (bigData[i].performance = "doubleDouble") {
+                    if (bigData[i].performance === "doubleDouble") {
                         resText['contents']['body'].contents.push({
                             "type": "box",
                             "layout": "baseline",
@@ -374,7 +374,73 @@ const textHandler = async (replyToken, inputText) => {
                             "type": "text",
                             "text": `${bigData[i].PLAYER}`,
                             "color": "#aaaaaa",
+                            "size": "md",
+                            "flex": 1
+                        })
+                        resText['contents']['body'].contents[length - 1]['contents'].push({
+                            "type": "text",
+                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
+                            "wrap": true,
+                            "color": "#666666",
                             "size": "sm",
+                            "flex": 5
+                        })
+                    }
+                }
+                break
+            case '大三元':
+                const today = moment().format('YYYY-MM-DD');
+                const result = await gameRecord.findOne({ where: { gameDate: today } })
+
+                if (!result || result.length == 0) {
+                    console.log("error, no data");
+                    resText = "No data";
+                }
+                let bigData = JSON.parse(result.bigData);
+                resText = {
+                    "type": "flex",
+                    "altText": `${today}NBA戰報`,
+                    "contents": {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover",
+                            "action": {
+                                "type": "uri",
+                                "uri": "http://linecorp.com/"
+                            }
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "今日大三元",
+                                    "weight": "bold",
+                                    "size": "xl"
+                                },
+                            ]
+                        }
+                    }
+                };
+                for (let i = 0; i < bigData.length; i++) {
+                    if (bigData[i].performance === "tripleDouble") {
+                        resText['contents']['body'].contents.push({
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "contents": [],
+                        })
+                        let length = resText['contents']['body'].contents.length;
+                        resText['contents']['body'].contents[length - 1]['contents'].push({
+                            "type": "text",
+                            "text": `${bigData[i].PLAYER}`,
+                            "color": "#aaaaaa",
+                            "size": "md",
                             "flex": 1
                         })
                         resText['contents']['body'].contents[length - 1]['contents'].push({
