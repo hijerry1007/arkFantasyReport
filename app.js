@@ -315,6 +315,8 @@ const handleEvent = (event) => {
 const textHandler = async (replyToken, inputText) => {
     try {
         let resText;
+        const today = moment().format('YYYY-MM-DD');
+
         switch (inputText) {
             case '賴賴':
                 resText = {
@@ -323,7 +325,6 @@ const textHandler = async (replyToken, inputText) => {
                 };
                 break
             case '雙十':
-                const today = moment().format('YYYY-MM-DD');
                 const result = await gameRecord.findOne({ where: { gameDate: today } })
 
                 if (!result || result.length == 0) {
@@ -389,7 +390,6 @@ const textHandler = async (replyToken, inputText) => {
                 }
                 break
             case '大三元':
-                const today = moment().format('YYYY-MM-DD');
                 const result = await gameRecord.findOne({ where: { gameDate: today } })
 
                 if (!result || result.length == 0) {
