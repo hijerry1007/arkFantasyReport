@@ -353,14 +353,14 @@ const textHandler = async (replyToken, inputText) => {
         let offset = 0;
 
 
-        while (messages.length <= maxTimes) {
-            let newText = resText.substring(offset, offset + 1000);
+        while (messages.length < maxTimes) {
+            let newText = resText.slice(offset, offset + 1500);
             if (newText.length <= 0) break;
             messages.push({
                 type: 'text',
                 text: newText
             });
-            offset += 1000;
+            offset += 1500;
         }
         return client.replyMessage(replyToken, messages);
     } catch (err) {
