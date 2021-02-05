@@ -339,18 +339,30 @@ const textHandler = async (replyToken, inputText) => {
                 let bigData = JSON.parse(result.bigData);
                 let str = '';
                 for (let i = 0; i < bigData.length; i++) {
-                    str += `${bigData[i].Player} ${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 `;
-                    str += `${bigData[i].BLK}鍋 ${bigData[i].TO}失誤 %0D%0A`;
+                    str += `${bigData[i].PLAYER} ${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 `;
+                    str += `${bigData[i].BLK}鍋 ${bigData[i].TO}失誤 %0D%0A `;
                 }
+
                 resText = str;
                 break
             default:
                 resText = '阿科羅伯特';
         }
-        return client.replyMessage(replyToken, {
-            type: 'text',
-            text: resText
-        });
+
+        let maxTimes = 5;    //因為Line的多則訊息上限是5
+        let messages = [];
+        let offset = 0;
+
+
+        while (messages.length <= maxTimes) {
+            if (resText.length <= 0) break;
+            messages.push({
+                type: 'text',
+                text: resText.slice(offset, offset + 1000)
+            });
+            offset += 1000;
+        }
+        return client.replyMessage(replyToken, messages);
     } catch (err) {
         console.log(err)
     }
