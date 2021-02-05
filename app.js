@@ -12,6 +12,7 @@ const db = require('./models');
 const gameRecord = db.gameRecord;
 const statisTitle = db.StatisTitle;
 const line = require('@line/bot-sdk');
+const { restart } = require('nodemon');
 const lineConfig = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET
@@ -315,17 +316,11 @@ const textHandler = async (replyToken, inputText) => {
     try {
         let resText;
         switch (inputText) {
-            case '你好':
-                resText = '你好啊';
-                break;
-            case 'test':
-                resText = `測試`;
-                break
             case '賴賴':
-                resText = '阿比我愛妳';
-                break
-            case 'lailai':
-                resText = '阿比我愛妳';
+                resText = {
+                    "type": "text",
+                    "text": '阿比我愛妳'
+                };
                 break
             case '戰報':
                 const today = moment().format('YYYY-MM-DD');
@@ -336,32 +331,81 @@ const textHandler = async (replyToken, inputText) => {
                     resText = "No data";
                 }
                 let bigData = JSON.parse(result.bigData);
-                let str = '';
+                resText = {
+                    "type": "bubble",
+                    "hero": {
+                        "type": "image",
+                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                        "size": "full",
+                        "aspectRatio": "20:13",
+                        "aspectMode": "cover",
+                        "action": {
+                            "type": "uri",
+                            "uri": "http://linecorp.com/"
+                        }
+                    },
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "戰報",
+                                "weight": "bold",
+                                "size": "xl"
+                            },
+                        ]
+                    }
+                };
                 for (let i = 0; i < bigData.length; i++) {
-                    str += `${bigData[i].PLAYER} ${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 `;
-                    str += `${bigData[i].BLK}鍋 ${bigData[i].TO}失誤 %0D%0A `;
+                    resText['body'].contents.push({
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "lg",
+                        "spacing": "sm",
+                        "contents": [],
+                    })
+                    let length = temp['body'].contents.length;
+                    resText['body'].contents[length - 1]['contents'].push({
+                        "type": "text",
+                        "text": `${bigData[i].PLAYER}`,
+                        "color": "#aaaaaa",
+                        "size": "sm",
+                        "flex": 1
+                    })
+                    resText['body'].contents[length - 1]['contents'].push({
+                        "type": "text",
+                        "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
+                        "wrap": true,
+                        "color": "#666666",
+                        "size": "sm",
+                        "flex": 5
+                    })
                 }
-
-                resText = str;
                 break
             default:
-                resText = '阿科羅伯特';
+                resText = {
+                    "type": "text",
+                    "text": '阿科羅伯特'
+                };
         }
 
-        let maxTimes = 5;    //因為Line的多則訊息上限是5
-        let messages = [];
-        let offset = 0;
+        // let maxTimes = 5;    //因為Line的多則訊息上限是5
+        // let messages = [];
+        // let offset = 0;
 
 
-        while (messages.length < maxTimes) {
-            let newText = resText.slice(offset, offset + 1500);
-            if (newText.length <= 0) break;
-            messages.push({
-                type: 'text',
-                text: newText
-            });
-            offset += 1500;
-        }
+        // while (messages.length < maxTimes) {
+        //     let newText = resText.slice(offset, offset + 1500);
+        //     if (newText.length <= 0) break;
+        //     messages.push({
+        //         type: 'text',
+        //         text: newText
+        //     });
+        //     offset += 1500;
+        // }
+        let messages = []
+        messages.push(resText);
         return client.replyMessage(replyToken, messages);
     } catch (err) {
         console.log(err)
