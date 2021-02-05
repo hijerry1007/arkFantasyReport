@@ -27,7 +27,6 @@ let fetchHead = cron.schedule('0 6 * * *', () => {
 let fetchBoxData = cron.schedule('0,30 00,10,12,14,15 * * *', () => {
     fetchData();
 }, { timezone: 'Asia/Shanghai' })
-fetchData();
 
 fetchHead.start();
 fetchBoxData.start();
@@ -355,10 +354,11 @@ const textHandler = async (replyToken, inputText) => {
 
 
         while (messages.length <= maxTimes) {
-            if (resText.length <= 0) break;
+            let newText = resText.substring(offset, offset + 1000);
+            if (newText.length <= 0) break;
             messages.push({
                 type: 'text',
-                text: resText.slice(offset, offset + 1000)
+                text: newText
             });
             offset += 1000;
         }
