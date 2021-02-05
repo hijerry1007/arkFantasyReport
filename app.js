@@ -369,7 +369,7 @@ const textHandler = async (replyToken, inputText) => {
                         "spacing": "sm",
                         "contents": [],
                     })
-                    let length = temp['contents']['body'].contents.length;
+                    let length = resText['contents']['body'].contents.length;
                     resText['contents']['body'].contents[length - 1]['contents'].push({
                         "type": "text",
                         "text": `${bigData[i].PLAYER}`,
