@@ -337,17 +337,6 @@ const textHandler = async (replyToken, inputText) => {
                     "altText": `${today}NBA戰報`,
                     "contents": {
                         "type": "bubble",
-                        "hero": {
-                            "type": "image",
-                            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
-                            "size": "full",
-                            "aspectRatio": "20:13",
-                            "aspectMode": "cover",
-                            "action": {
-                                "type": "uri",
-                                "uri": "http://linecorp.com/"
-                            }
-                        },
                         "body": {
                             "type": "box",
                             "layout": "vertical",
@@ -375,12 +364,15 @@ const textHandler = async (replyToken, inputText) => {
                             "type": "text",
                             "text": `${bigData[i].PLAYER}`,
                             "color": "#aaaaaa",
-                            "size": "md",
-                            "flex": 1
+                            "size": "sm",
+                            "flex": 3
                         })
+                        let statics = '';
+                        if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
+                        if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
                         resText['contents']['body'].contents[length - 1]['contents'].push({
                             "type": "text",
-                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
+                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻` + statics,
                             "wrap": true,
                             "color": "#666666",
                             "size": "sm",
@@ -395,17 +387,6 @@ const textHandler = async (replyToken, inputText) => {
                     "altText": `${today}NBA戰報`,
                     "contents": {
                         "type": "bubble",
-                        "hero": {
-                            "type": "image",
-                            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
-                            "size": "full",
-                            "aspectRatio": "20:13",
-                            "aspectMode": "cover",
-                            "action": {
-                                "type": "uri",
-                                "uri": "http://linecorp.com/"
-                            }
-                        },
                         "body": {
                             "type": "box",
                             "layout": "vertical",
@@ -433,12 +414,15 @@ const textHandler = async (replyToken, inputText) => {
                             "type": "text",
                             "text": `${bigData[i].PLAYER}`,
                             "color": "#aaaaaa",
-                            "size": "md",
-                            "flex": 1
+                            "size": "sm",
+                            "flex": 3
                         })
+                        let statics = '';
+                        if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
+                        if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
                         resText['contents']['body'].contents[length - 1]['contents'].push({
                             "type": "text",
-                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻 ${bigData[i].STL}抄截 ${bigData[i].BLK}鍋 ${bigData[i].TO}失誤`,
+                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻` + statics,
                             "wrap": true,
                             "color": "#666666",
                             "size": "sm",
