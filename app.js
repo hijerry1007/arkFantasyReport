@@ -316,6 +316,13 @@ const textHandler = async (replyToken, inputText) => {
     try {
         let resText;
         const today = moment().format('YYYY-MM-DD');
+        const result = await gameRecord.findOne({ where: { gameDate: today } })
+
+        if (!result || result.length == 0) {
+            console.log("error, no data");
+            resText = "No data";
+        }
+        let bigData = JSON.parse(result.bigData);
 
         switch (inputText) {
             case '賴賴':
@@ -325,13 +332,6 @@ const textHandler = async (replyToken, inputText) => {
                 };
                 break
             case '雙十':
-                const result = await gameRecord.findOne({ where: { gameDate: today } })
-
-                if (!result || result.length == 0) {
-                    console.log("error, no data");
-                    resText = "No data";
-                }
-                let bigData = JSON.parse(result.bigData);
                 resText = {
                     "type": "flex",
                     "altText": `${today}NBA戰報`,
@@ -390,13 +390,6 @@ const textHandler = async (replyToken, inputText) => {
                 }
                 break
             case '大三元':
-                const result = await gameRecord.findOne({ where: { gameDate: today } })
-
-                if (!result || result.length == 0) {
-                    console.log("error, no data");
-                    resText = "No data";
-                }
-                let bigData = JSON.parse(result.bigData);
                 resText = {
                     "type": "flex",
                     "altText": `${today}NBA戰報`,
