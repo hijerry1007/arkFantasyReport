@@ -337,6 +337,7 @@ const textHandler = async (replyToken, inputText) => {
                     "altText": `${today}NBA戰報`,
                     "contents": {
                         "type": "bubble",
+                        "size": "giga",
                         "body": {
                             "type": "box",
                             "layout": "vertical",
@@ -347,37 +348,59 @@ const textHandler = async (replyToken, inputText) => {
                                     "weight": "bold",
                                     "size": "xl"
                                 },
+                                {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "margin": "lg",
+                                    "contents": []
+                                }
                             ]
                         }
                     }
                 };
                 for (let i = 0; i < bigData.length; i++) {
                     if (bigData[i].performance === "doubleDouble") {
-                        resText['contents']['body'].contents.push({
+                        resText['contents']['body'].contents[1]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
-                            "margin": "md",
-                            "contents": [],
-                        })
-                        let length = resText['contents']['body'].contents.length;
-                        resText['contents']['body'].contents[length - 1]['contents'].push({
-                            "type": "text",
-                            "text": `${bigData[i].PLAYER}`,
-                            "color": "#aaaaaa",
-                            "size": "sm",
-                            "flex": 3
-                        })
-                        let statics = '';
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${bigData[i].PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
+                                }
+                            ],
+                            "background": {
+                                "type": "linearGradient",
+                                "angle": "0deg",
+                                "startColor": "#aaaaaa",
+                                "endColor": "#ffffff"
+                            },
+                            "margin": "md"
+                        });
+                        let statics = `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻`;
                         if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
                         if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
-                        resText['contents']['body'].contents[length - 1]['contents'].push({
-                            "type": "text",
-                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻` + statics,
-                            "wrap": true,
-                            "color": "#666666",
-                            "size": "sm",
-                            "flex": 5
-                        })
+                        if (Number(`${bigData[i]['FG%']}`) >= 40) statics += `${bigData[i]['FG%']}%`
+                        if (Number(`${bigData[i]['3PM']}`) >= 3) statics += `${bigData[i]['3PM']}三分命中`;
+                        resText['contents']['body'].contents[1]['contents'].push(
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": statics,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
+                            }
+                        );
                     }
                 }
                 break
@@ -387,6 +410,7 @@ const textHandler = async (replyToken, inputText) => {
                     "altText": `${today}NBA戰報`,
                     "contents": {
                         "type": "bubble",
+                        "size": "giga",
                         "body": {
                             "type": "box",
                             "layout": "vertical",
@@ -397,37 +421,59 @@ const textHandler = async (replyToken, inputText) => {
                                     "weight": "bold",
                                     "size": "xl"
                                 },
+                                {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "margin": "lg",
+                                    "contents": []
+                                }
                             ]
                         }
                     }
                 };
                 for (let i = 0; i < bigData.length; i++) {
                     if (bigData[i].performance === "tripleDouble") {
-                        resText['contents']['body'].contents.push({
+                        resText['contents']['body'].contents[1]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
-                            "margin": "md",
-                            "contents": [],
-                        })
-                        let length = resText['contents']['body'].contents.length;
-                        resText['contents']['body'].contents[length - 1]['contents'].push({
-                            "type": "text",
-                            "text": `${bigData[i].PLAYER}`,
-                            "color": "#aaaaaa",
-                            "size": "sm",
-                            "flex": 3
-                        })
-                        let statics = '';
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${bigData[i].PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
+                                }
+                            ],
+                            "background": {
+                                "type": "linearGradient",
+                                "angle": "0deg",
+                                "startColor": "#aaaaaa",
+                                "endColor": "#ffffff"
+                            },
+                            "margin": "md"
+                        });
+                        let statics = `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻`;
                         if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
                         if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
-                        resText['contents']['body'].contents[length - 1]['contents'].push({
-                            "type": "text",
-                            "text": `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻` + statics,
-                            "wrap": true,
-                            "color": "#666666",
-                            "size": "sm",
-                            "flex": 5
-                        })
+                        if (Number(`${bigData[i]['FG%']}`) >= 40) statics += `${bigData[i]['FG%']}%`
+                        if (Number(`${bigData[i]['3PM']}`) >= 3) statics += `${bigData[i]['3PM']}三分命中`;
+                        resText['contents']['body'].contents[1]['contents'].push(
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": statics,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
+                            }
+                        );
                     }
                 }
                 break
