@@ -926,6 +926,8 @@ const textHandler = async (replyToken, inputText) => {
                     );
                 });
                 break
+            default:
+                return null;
         }
 
         // let maxTimes = 5;    //因為Line的多則訊息上限是5
