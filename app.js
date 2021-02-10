@@ -675,7 +675,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p.REB}籃板`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -683,6 +683,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[3]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p.REB}籃板`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 AST.forEach(p => {
                     resText['contents']['body'].contents[5]['contents'].push({
@@ -691,7 +707,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p.AST}助攻`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -699,6 +715,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[5]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p.AST}助攻`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 STL.forEach(p => {
                     resText['contents']['body'].contents[7]['contents'].push({
@@ -707,7 +739,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p.STL}抄截`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -715,6 +747,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[7]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p.STL}抄截`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 BLK.forEach(p => {
                     resText['contents']['body'].contents[9]['contents'].push({
@@ -723,7 +771,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p.BLK}火鍋`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -731,6 +779,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[9]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p.BLK}火鍋`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 TO.forEach(p => {
                     resText['contents']['body'].contents[11]['contents'].push({
@@ -739,7 +803,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p.TO}失誤`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -747,6 +811,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[11]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p.TO}失誤`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 THREE.forEach(p => {
                     resText['contents']['body'].contents[13]['contents'].push({
@@ -755,7 +835,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p['3PA']}投 ${p['3PM']}中 ${p['3P%']}%三分命中率`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -763,6 +843,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[13]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p['3PA']}投 ${p['3PM']}中 ${p['3P%']}%三分命中率`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 FT.forEach(p => {
                     resText['contents']['body'].contents[15]['contents'].push({
@@ -771,7 +867,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p['FTA']}投 ${p['FTM']}中`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -779,6 +875,22 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    resText['contents']['body'].contents[15]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": `${p['FTA']}投 ${p['FTM']}中 ${p['FT%']}%罰球命中率`,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 FGA.forEach(p => {
                     resText['contents']['body'].contents[17]['contents'].push({
@@ -795,7 +907,7 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
-                    let statics = `${p['FGA']}投 ${p['FGM']}中 ${p['FG%']}%三分命中率`;
+                    let statics = `${p['FGA']}投 ${p['FGM']}中 ${p['FG%']}%命中率`;
                     resText['contents']['body'].contents[17]['contents'].push(
                         {
                             "type": "box",
