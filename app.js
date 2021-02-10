@@ -787,11 +787,7 @@ const textHandler = async (replyToken, inputText) => {
                         "margin": "md"
                     });
                 });
-            default:
-                resText = {
-                    "type": "text",
-                    "text": '阿科羅伯特'
-                };
+                break
         }
 
         // let maxTimes = 5;    //因為Line的多則訊息上限是5
