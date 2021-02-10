@@ -525,7 +525,8 @@ const textHandler = async (replyToken, inputText) => {
                         "type": "text",
                         "text": "得分前五",
                         "weight": "bold",
-                        "size": "xl"
+                        "size": "xl",
+                        "margin": "md"
                     },
                     {
                         "type": "box",
@@ -536,7 +537,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "籃板前五",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -547,7 +549,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "助攻前五",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -558,7 +561,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "抄截前五",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -569,7 +573,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "火鍋前五",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -580,7 +585,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "失誤王",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -591,7 +597,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "三分前五",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -602,7 +609,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "買飯王",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -613,7 +621,8 @@ const textHandler = async (replyToken, inputText) => {
                     "type": "text",
                     "text": "自幹王",
                     "weight": "bold",
-                    "size": "xl"
+                    "size": "xl",
+                    "margin": "md"
                 },
                     {
                         "type": "box",
@@ -637,7 +646,7 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
-                    let statics = `${p}.PTS}分 ${p.REB}籃板 ${p.AST}助攻`;
+                    let statics = `${p.PTS}分 ${p.REB}籃板 ${p.AST}助攻`;
                     if (Number(`${p.STL}`) >= 2) statics += `${p.STL}抄截`;
                     if (Number(`${p.BLK}`) >= 2) statics += `${p.BLK}鍋`;
                     if (Number(`${p['FG%']}`) >= 40) statics += `命中率${p['FG%']}%`
@@ -778,7 +787,7 @@ const textHandler = async (replyToken, inputText) => {
                         "contents": [
                             {
                                 "type": "text",
-                                "text": `${p.PLAYER}   ${p['FGA']}投 ${p['FGM']}中 ${p['FG%']}%三分命中率`,
+                                "text": `${p.PLAYER}`,
                                 "color": "#238aeb",
                                 "size": "lg",
                                 "weight": "bold",
@@ -786,6 +795,23 @@ const textHandler = async (replyToken, inputText) => {
                         ],
                         "margin": "md"
                     });
+                    let statics = `${p['FGA']}投 ${p['FGM']}中 ${p['FG%']}%三分命中率`;
+                    resText['contents']['body'].contents[17]['contents'].push(
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": statics,
+                                    "wrap": true,
+                                    "color": "#223332",
+                                    "size": "md"
+                                }
+                            ],
+                            "margin": "md",
+                        }
+                    );
                 });
                 break
         }
