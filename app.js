@@ -316,13 +316,6 @@ const textHandler = async (replyToken, inputText) => {
     try {
         let resText;
         const today = moment().format('YYYY-MM-DD');
-        const result = await gameRecord.findOne({ where: { gameDate: today } })
-
-        if (!result || result.length == 0) {
-            console.log("error, no data");
-            resText = "No data";
-        }
-        let bigData = JSON.parse(result.bigData);
 
         switch (inputText) {
             case '賴賴':
@@ -332,618 +325,627 @@ const textHandler = async (replyToken, inputText) => {
                 };
                 break
             case '雙十':
-                bigData = bigData.sort((a, b) => b.PTS - a.PTS);
-                resText = {
-                    "type": "flex",
-                    "altText": `${today}NBA戰報`,
-                    "contents": {
-                        "type": "bubble",
-                        "body": {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "今日雙十",
-                                    "weight": "bold",
-                                    "size": "xl"
-                                },
+                const result = await gameRecord.findOne({ where: { gameDate: today } })
+
+                if (!result || result.length == 0) {
+                    console.log("error, no data");
+                    resText = "No data";
+                } else {
+                    let bigData = JSON.parse(result.bigData);
+                    bigData = bigData.sort((a, b) => b.PTS - a.PTS);
+                    resText = {
+                        "type": "flex",
+                        "altText": `${today}NBA戰報`,
+                        "contents": {
+                            "type": "bubble",
+                            "body": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "今日雙十",
+                                        "weight": "bold",
+                                        "size": "xl"
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "margin": "lg",
+                                        "contents": []
+                                    }
+                                ]
+                            }
+                        }
+                    };
+                    for (let i = 0; i < bigData.length; i++) {
+                        if (bigData[i].performance === "doubleDouble") {
+                            resText['contents']['body'].contents[1]['contents'].push({
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${bigData[i].PLAYER}`,
+                                        "color": "#238aeb",
+                                        "size": "lg",
+                                        "weight": "bold",
+                                    }
+                                ],
+                                "margin": "md"
+                            });
+                            let statics = `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻`;
+                            if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
+                            if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
+                            if (Number(`${bigData[i]['FG%']}`) >= 40) statics += `命中率${bigData[i]['FG%']}%`
+                            if (Number(`${bigData[i]['3PM']}`) >= 3) statics += `${bigData[i]['3PM']}三分命中`;
+                            resText['contents']['body'].contents[1]['contents'].push(
                                 {
                                     "type": "box",
-                                    "layout": "vertical",
-                                    "margin": "lg",
-                                    "contents": []
+                                    "layout": "baseline",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": statics,
+                                            "wrap": true,
+                                            "color": "#223332",
+                                            "size": "md"
+                                        }
+                                    ],
+                                    "margin": "md",
                                 }
-                            ]
+                            );
                         }
                     }
-                };
-                for (let i = 0; i < bigData.length; i++) {
-                    if (bigData[i].performance === "doubleDouble") {
+                    if (resText['contents']['body'].contents[1]['contents'].length == 0) {
                         resText['contents']['body'].contents[1]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${bigData[i].PLAYER}`,
+                                    "text": "無",
                                     "color": "#238aeb",
                                     "size": "lg",
                                     "weight": "bold",
                                 }
                             ],
                             "margin": "md"
-                        });
-                        let statics = `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻`;
-                        if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
-                        if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
-                        if (Number(`${bigData[i]['FG%']}`) >= 40) statics += `命中率${bigData[i]['FG%']}%`
-                        if (Number(`${bigData[i]['3PM']}`) >= 3) statics += `${bigData[i]['3PM']}三分命中`;
-                        resText['contents']['body'].contents[1]['contents'].push(
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": statics,
-                                        "wrap": true,
-                                        "color": "#223332",
-                                        "size": "md"
-                                    }
-                                ],
-                                "margin": "md",
-                            }
-                        );
+                        })
                     }
-                }
-                if (resText['contents']['body'].contents[1]['contents'].length == 0) {
-                    resText['contents']['body'].contents[1]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": "無",
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
-                            }
-                        ],
-                        "margin": "md"
-                    })
                 }
                 break
             case '大三元':
-                bigData = bigData.sort((a, b) => b.PTS - a.PTS);
-                resText = {
-                    "type": "flex",
-                    "altText": `${today}NBA戰報`,
-                    "contents": {
-                        "type": "bubble",
-                        "body": {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "今日大三元",
-                                    "weight": "bold",
-                                    "size": "xl"
-                                },
+                const result = await gameRecord.findOne({ where: { gameDate: today } })
+
+                if (!result || result.length == 0) {
+                    console.log("error, no data");
+                    resText = "No data";
+                } else {
+                    let bigData = JSON.parse(result.bigData);
+                    bigData = bigData.sort((a, b) => b.PTS - a.PTS);
+                    resText = {
+                        "type": "flex",
+                        "altText": `${today}NBA戰報`,
+                        "contents": {
+                            "type": "bubble",
+                            "body": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "今日大三元",
+                                        "weight": "bold",
+                                        "size": "xl"
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "margin": "lg",
+                                        "contents": []
+                                    }
+                                ]
+                            }
+                        }
+                    };
+                    for (let i = 0; i < bigData.length; i++) {
+                        if (bigData[i].performance === "tripleDouble") {
+                            resText['contents']['body'].contents[1]['contents'].push({
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${bigData[i].PLAYER}`,
+                                        "color": "#238aeb",
+                                        "size": "lg",
+                                        "weight": "bold",
+                                    }
+                                ],
+                                "margin": "md"
+                            });
+                            let statics = `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻`;
+                            if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
+                            if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
+                            if (Number(`${bigData[i]['FG%']}`) >= 40) statics += `命中率${bigData[i]['FG%']}%`
+                            if (Number(`${bigData[i]['3PM']}`) >= 3) statics += `${bigData[i]['3PM']}三分命中`;
+                            resText['contents']['body'].contents[1]['contents'].push(
                                 {
                                     "type": "box",
-                                    "layout": "vertical",
-                                    "margin": "lg",
-                                    "contents": []
+                                    "layout": "baseline",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": statics,
+                                            "wrap": true,
+                                            "color": "#223332",
+                                            "size": "md"
+                                        }
+                                    ],
+                                    "margin": "md",
                                 }
-                            ]
+                            );
                         }
                     }
-                };
-                for (let i = 0; i < bigData.length; i++) {
-                    if (bigData[i].performance === "tripleDouble") {
+                    if (resText['contents']['body'].contents[1]['contents'].length == 0) {
                         resText['contents']['body'].contents[1]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${bigData[i].PLAYER}`,
+                                    "text": "無",
                                     "color": "#238aeb",
                                     "size": "lg",
                                     "weight": "bold",
                                 }
                             ],
                             "margin": "md"
-                        });
-                        let statics = `${bigData[i].PTS}分 ${bigData[i].REB}籃板 ${bigData[i].AST}助攻`;
-                        if (Number(`${bigData[i].STL}`) >= 2) statics += `${bigData[i].STL}抄截`;
-                        if (Number(`${bigData[i].BLK}`) >= 2) statics += `${bigData[i].BLK}鍋`;
-                        if (Number(`${bigData[i]['FG%']}`) >= 40) statics += `命中率${bigData[i]['FG%']}%`
-                        if (Number(`${bigData[i]['3PM']}`) >= 3) statics += `${bigData[i]['3PM']}三分命中`;
-                        resText['contents']['body'].contents[1]['contents'].push(
-                            {
-                                "type": "box",
-                                "layout": "baseline",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": statics,
-                                        "wrap": true,
-                                        "color": "#223332",
-                                        "size": "md"
-                                    }
-                                ],
-                                "margin": "md",
-                            }
-                        );
+                        })
                     }
-                }
-                if (resText['contents']['body'].contents[1]['contents'].length == 0) {
-                    resText['contents']['body'].contents[1]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": "無",
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
-                            }
-                        ],
-                        "margin": "md"
-                    })
                 }
                 break
             case '戰報':
-                let PTS = bigData.sort((a, b) => b.PTS - a.PTS).slice(0, 5);
-                let REB = bigData.sort((a, b) => b.REB - a.REB).slice(0, 5);
-                let AST = bigData.sort((a, b) => b.AST - a.AST).slice(0, 5);
-                let STL = bigData.sort((a, b) => b.STL - a.STL).slice(0, 5);
-                let BLK = bigData.sort((a, b) => b.BLK - a.BLK).slice(0, 5);
-                let THREE = bigData.sort((a, b) => b['3PM'] - a['3PM']).slice(0, 5);
-                let TO = bigData.sort((a, b) => b.TO - a.TO).slice(0, 5);
-                let FT = bigData.sort((a, b) => b.FTA - a.FTA).slice(0, 5);
-                let FGA = bigData.sort((a, b) => b.FGA - a.FGA).slice(0, 5);
-                resText = {
-                    "type": "flex",
-                    "altText": `${today}NBA戰報`,
-                    "contents": {
-                        "type": "bubble",
-                        "body": {
+                const result = await gameRecord.findOne({ where: { gameDate: today } })
+
+                if (!result || result.length == 0) {
+                    console.log("error, no data");
+                    resText = "No data";
+                } else {
+                    let bigData = JSON.parse(result.bigData);
+                    let PTS = bigData.sort((a, b) => b.PTS - a.PTS).slice(0, 5);
+                    let REB = bigData.sort((a, b) => b.REB - a.REB).slice(0, 5);
+                    let AST = bigData.sort((a, b) => b.AST - a.AST).slice(0, 5);
+                    let STL = bigData.sort((a, b) => b.STL - a.STL).slice(0, 5);
+                    let BLK = bigData.sort((a, b) => b.BLK - a.BLK).slice(0, 5);
+                    let THREE = bigData.sort((a, b) => b['3PM'] - a['3PM']).slice(0, 5);
+                    let TO = bigData.sort((a, b) => b.TO - a.TO).slice(0, 5);
+                    let FT = bigData.sort((a, b) => b.FTA - a.FTA).slice(0, 5);
+                    let FGA = bigData.sort((a, b) => b.FGA - a.FGA).slice(0, 5);
+                    resText = {
+                        "type": "flex",
+                        "altText": `${today}NBA戰報`,
+                        "contents": {
+                            "type": "bubble",
+                            "body": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                ]
+                            }
+                        }
+                    };
+                    resText['contents']['body'].contents.push(
+                        {
+                            "type": "text",
+                            "text": "得分前五",
+                            "weight": "bold",
+                            "size": "xl",
+                            "margin": "md"
+                        },
+                        {
                             "type": "box",
                             "layout": "vertical",
-                            "contents": [
-                            ]
-                        }
-                    }
-                };
-                resText['contents']['body'].contents.push(
-                    {
+                            "margin": "lg",
+                            "contents": []
+                        }, {
                         "type": "text",
-                        "text": "得分前五",
+                        "text": "籃板前五",
                         "weight": "bold",
                         "size": "xl",
                         "margin": "md"
                     },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "籃板前五",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "助攻前五",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "抄截前五",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "火鍋前五",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "失誤王",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "三分前五",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "買飯王",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }, {
-                    "type": "text",
-                    "text": "自幹王",
-                    "weight": "bold",
-                    "size": "xl",
-                    "margin": "md"
-                },
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "contents": []
-                    }
-                );
-                PTS.forEach(p => {
-                    resText['contents']['body'].contents[1]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
-                            }
-                        ],
-                        "margin": "md"
-                    });
-                    let statics = `${p.PTS}分 ${p.REB}籃板 ${p.AST}助攻`;
-                    if (Number(`${p.STL}`) >= 2) statics += `${p.STL}抄截`;
-                    if (Number(`${p.BLK}`) >= 2) statics += `${p.BLK}鍋`;
-                    if (Number(`${p['FG%']}`) >= 40) statics += `命中率${p['FG%']}%`
-                    if (Number(`${p['3PM']}`) >= 3) statics += `${p['3PM']}三分命中`;
-                    resText['contents']['body'].contents[1]['contents'].push(
                         {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "助攻前五",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "抄截前五",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "火鍋前五",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "失誤王",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "三分前五",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "買飯王",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }, {
+                        "type": "text",
+                        "text": "自幹王",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md"
+                    },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "margin": "lg",
+                            "contents": []
+                        }
+                    );
+                    PTS.forEach(p => {
+                        resText['contents']['body'].contents[1]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": statics,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                REB.forEach(p => {
-                    resText['contents']['body'].contents[3]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        let statics = `${p.PTS}分 ${p.REB}籃板 ${p.AST}助攻`;
+                        if (Number(`${p.STL}`) >= 2) statics += `${p.STL}抄截`;
+                        if (Number(`${p.BLK}`) >= 2) statics += `${p.BLK}鍋`;
+                        if (Number(`${p['FG%']}`) >= 40) statics += `命中率${p['FG%']}%`
+                        if (Number(`${p['3PM']}`) >= 3) statics += `${p['3PM']}三分命中`;
+                        resText['contents']['body'].contents[1]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": statics,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[3]['contents'].push(
-                        {
+                    REB.forEach(p => {
+                        resText['contents']['body'].contents[3]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p.REB}籃板`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                AST.forEach(p => {
-                    resText['contents']['body'].contents[5]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[3]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p.REB}籃板`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[5]['contents'].push(
-                        {
+                    AST.forEach(p => {
+                        resText['contents']['body'].contents[5]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p.AST}助攻`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                STL.forEach(p => {
-                    resText['contents']['body'].contents[7]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[5]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p.AST}助攻`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[7]['contents'].push(
-                        {
+                    STL.forEach(p => {
+                        resText['contents']['body'].contents[7]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p.STL}抄截`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                BLK.forEach(p => {
-                    resText['contents']['body'].contents[9]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[7]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p.STL}抄截`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[9]['contents'].push(
-                        {
+                    BLK.forEach(p => {
+                        resText['contents']['body'].contents[9]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p.BLK}火鍋`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                TO.forEach(p => {
-                    resText['contents']['body'].contents[11]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[9]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p.BLK}火鍋`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[11]['contents'].push(
-                        {
+                    TO.forEach(p => {
+                        resText['contents']['body'].contents[11]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p.TO}失誤`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                THREE.forEach(p => {
-                    resText['contents']['body'].contents[13]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[11]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p.TO}失誤`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[13]['contents'].push(
-                        {
+                    THREE.forEach(p => {
+                        resText['contents']['body'].contents[13]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p['3PA']}投 ${p['3PM']}中 ${p['3P%']}%三分命中率`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                FT.forEach(p => {
-                    resText['contents']['body'].contents[15]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[13]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p['3PA']}投 ${p['3PM']}中 ${p['3P%']}%三分命中率`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    resText['contents']['body'].contents[15]['contents'].push(
-                        {
+                    FT.forEach(p => {
+                        resText['contents']['body'].contents[15]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": `${p['FTA']}投 ${p['FTM']}中 ${p['FT%']}%罰球命中率`,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
-                FGA.forEach(p => {
-                    resText['contents']['body'].contents[17]['contents'].push({
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
+                            "margin": "md"
+                        });
+                        resText['contents']['body'].contents[15]['contents'].push(
                             {
-                                "type": "text",
-                                "text": `${p.PLAYER}`,
-                                "color": "#238aeb",
-                                "size": "lg",
-                                "weight": "bold",
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": `${p['FTA']}投 ${p['FTM']}中 ${p['FT%']}%罰球命中率`,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
                             }
-                        ],
-                        "margin": "md"
+                        );
                     });
-                    let statics = `${p['FGA']}投 ${p['FGM']}中 ${p['FG%']}%命中率`;
-                    resText['contents']['body'].contents[17]['contents'].push(
-                        {
+                    FGA.forEach(p => {
+                        resText['contents']['body'].contents[17]['contents'].push({
                             "type": "box",
                             "layout": "baseline",
                             "contents": [
                                 {
                                     "type": "text",
-                                    "text": statics,
-                                    "wrap": true,
-                                    "color": "#223332",
-                                    "size": "md"
+                                    "text": `${p.PLAYER}`,
+                                    "color": "#238aeb",
+                                    "size": "lg",
+                                    "weight": "bold",
                                 }
                             ],
-                            "margin": "md",
-                        }
-                    );
-                });
+                            "margin": "md"
+                        });
+                        let statics = `${p['FGA']}投 ${p['FGM']}中 ${p['FG%']}%命中率`;
+                        resText['contents']['body'].contents[17]['contents'].push(
+                            {
+                                "type": "box",
+                                "layout": "baseline",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": statics,
+                                        "wrap": true,
+                                        "color": "#223332",
+                                        "size": "md"
+                                    }
+                                ],
+                                "margin": "md",
+                            }
+                        );
+                    });
+                }
                 break
             default:
                 return null;
         }
-
-        // let maxTimes = 5;    //因為Line的多則訊息上限是5
-        // let messages = [];
-        // let offset = 0;
-
-
-        // while (messages.length < maxTimes) {
-        //     let newText = resText.slice(offset, offset + 1500);
-        //     if (newText.length <= 0) break;
-        //     messages.push({
-        //         type: 'text',
-        //         text: newText
-        //     });
-        //     offset += 1500;
-        // }
         let messages = []
         messages.push(resText);
         return client.replyMessage(replyToken, messages);
