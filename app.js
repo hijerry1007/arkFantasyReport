@@ -303,10 +303,12 @@ const handleEvent = (event) => {
         case 'message': //傳訊息給機器人
             switch (event.message.type) {
                 case 'text':
-                    if (event.message.text !== '雙十' || event.message.text !== '大三元' || event.message.text !== '戰報' || event.message.text !== '賴賴') {
-                        return null
+                    console.log(event.message.text)
+                    if (event.message.text == '雙十' || event.message.text == '大三元' || event.message.text == '戰報' || event.message.text == '賴賴') {
+                        textHandler(event.replyToken, event.message.text);
+                    } else {
+                        return
                     }
-                    textHandler(event.replyToken, event.message.text);
                     break;
                 case 'sticker':
                     // do sth with sticker
